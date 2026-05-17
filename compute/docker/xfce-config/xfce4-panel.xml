@@ -8,32 +8,36 @@
     <property name="position" type="string" value="p=6;x=640;y=14"/>
     <property name="length" type="uint" value="100"/>
     <property name="position-locked" type="bool" value="true"/>
-    <property name="size" type="uint" value="26"/>
+    <property name="size" type="uint" value="24"/>
     <property name="background-style" type="uint" value="1"/>
     <property name="background-rgba" type="array">
-      <value type="double" value="0.12"/>
-      <value type="double" value="0.12"/>
-      <value type="double" value="0.14"/>
-      <value type="double" value="0.85"/>
+      <value type="double" value="0.06"/>
+      <value type="double" value="0.06"/>
+      <value type="double" value="0.08"/>
+      <value type="double" value="0.70"/>
     </property>
+    <property name="enter-opacity" type="uint" value="100"/>
+    <property name="leave-opacity" type="uint" value="100"/>
     <property name="plugin-ids" type="array">
       <value type="int" value="1"/>
       <value type="int" value="2"/>
       <value type="int" value="3"/>
-      <value type="int" value="4"/>
     </property>
   </property>
   <property name="plugins" type="empty">
-    <property name="plugin-1" type="string" value="whiskermenu"/>
+    <property name="plugin-1" type="string" value="applicationsmenu">
+      <property name="show-button-title" type="bool" value="true"/>
+      <property name="button-title" type="string" value="Vessel"/>
+      <property name="show-tooltips" type="bool" value="false"/>
+      <property name="small" type="bool" value="true"/>
+    </property>
     <property name="plugin-2" type="string" value="separator">
       <property name="expand" type="bool" value="true"/>
       <property name="style" type="uint" value="0"/>
     </property>
     <property name="plugin-3" type="string" value="clock">
       <property name="digital-format" type="string" value="%a %b %d  %H:%M"/>
-    </property>
-    <property name="plugin-4" type="string" value="separator">
-      <property name="style" type="uint" value="0"/>
+      <property name="mode" type="uint" value="2"/>
     </property>
   </property>
 </channel>

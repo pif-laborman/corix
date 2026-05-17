@@ -52,10 +52,15 @@ COPY docker/themes/icons/WhiteSur-dark /usr/share/icons/WhiteSur-dark
 # Install pre-built WhiteSur cursors
 COPY docker/themes/cursors/WhiteSur-cursors /usr/share/icons/WhiteSur-cursors
 
-# Create macOS-style wallpaper (dark gradient)
+# Create macOS Sonoma-style wallpaper (rich blue-purple gradient with warm accent)
 RUN convert -size 1280x720 \
-    -define gradient:angle=135 \
-    gradient:'#1a1a2e'-'#16213e' \
+    xc:none \
+    \( -size 1280x720 gradient:'#0f0523'-'#1a1040' -evaluate multiply 1 \) \
+    \( -size 640x360 radial-gradient:'#3a1078'-'#0f0523' -geometry +640+360 -compose over \) -composite \
+    \( -size 400x400 radial-gradient:'#6c2c91'-transparent -geometry +900+100 -compose over \) -composite \
+    \( -size 500x300 radial-gradient:'#1e3a6e'-transparent -geometry +100+400 -compose over \) -composite \
+    \( -size 300x300 radial-gradient:'#c7435520'-transparent -geometry +700+500 -compose over \) -composite \
+    -blur 0x30 \
     /usr/share/backgrounds/vessel-dark.png
 
 WORKDIR /root
@@ -71,9 +76,9 @@ COPY docker/xfce-config/xfce4-panel.xml /root/.config/xfce4/xfconf/xfce-perchann
 RUN mkdir -p /root/.config/xfce4/terminal && \
     printf '[Configuration]\nFontName=DejaVu Sans Mono 10\nColorBackground=#1a1a2e\nColorForeground=#e0e0e0\nBackgroundMode=TERMINAL_BACKGROUND_TRANSPARENT\nBackgroundDarkness=0.95\nScrollingBar=TERMINAL_SCROLLBAR_NONE\nMiscBordersDefault=TRUE\n' > /root/.config/xfce4/terminal/terminalrc
 
-# Plank dock config (macOS-style bottom dock)
+# Plank dock config (macOS-style bottom dock, always visible, large icons)
 RUN mkdir -p /root/.config/plank/dock1/launchers && \
-    printf '[PlankDockPreferences]\nHideMode=3\nTheme=Transparent\nPosition=3\nIconSize=48\nDockItems=google-chrome.dockitem;xfce4-terminal.dockitem;xfce4-file-manager.dockitem\n' > /root/.config/plank/dock1/settings && \
+    printf '[PlankDockPreferences]\nHideMode=0\nTheme=Default\nPosition=3\nIconSize=56\nOffset=0\nAlignment=3\nItemsAlignment=3\nDockItems=google-chrome.dockitem;xfce4-terminal.dockitem;xfce4-file-manager.dockitem\n' > /root/.config/plank/dock1/settings && \
     printf '[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/google-chrome.desktop\n' > /root/.config/plank/dock1/launchers/google-chrome.dockitem && \
     printf '[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/xfce4-terminal.desktop\n' > /root/.config/plank/dock1/launchers/xfce4-terminal.dockitem && \
     printf '[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/thunar.desktop\n' > /root/.config/plank/dock1/launchers/xfce4-file-manager.dockitem
