@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import { DesktopViewer } from "./DesktopViewer";
 import { CreateComputerPopover } from "./CreateComputerPopover";
@@ -129,15 +130,23 @@ export function DashboardShell({
   initialComputers: Computer[];
   initialApiKeys: ApiKey[];
 }) {
-  const [view, setView] = useState<View>(initialComputers.length > 0 ? "computer" : "home");
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const urlComputerId = searchParams.get("computer");
+
+  // If URL has ?computer=, use that; otherwise fall back to first computer
+  const initialSelected = urlComputerId && initialComputers.some((c) => c.id === urlComputerId)
+    ? urlComputerId
+    : initialComputers.length > 0 ? initialComputers[0].id : null;
+  const initialView: View = initialSelected ? "computer" : "home";
+
+  const [view, setView] = useState<View>(initialView);
   const [computers, setComputers] = useState(initialComputers);
   const [workspaces, setWorkspaces] = useState<Workspace[]>(initialWorkspaces);
   const [activeWorkspaceId, setActiveWorkspaceId] = useState<string | null>(
     initialWorkspaces.length > 0 ? initialWorkspaces[0].id : null
   );
-  const [selectedComputerId, setSelectedComputerId] = useState<string | null>(
-    initialComputers.length > 0 ? initialComputers[0].id : null
-  );
+  const [selectedComputerId, setSelectedComputerId] = useState<string | null>(initialSelected);
   const [showCreate, setShowCreate] = useState(false);
   const [settingsTab, setSettingsTab] = useState<string | null>(null);
 
@@ -158,16 +167,14 @@ export function DashboardShell({
         setWorkspaces((prev) => [...prev, data]);
         setActiveWorkspaceId(data.id);
         setComputers([]);
-        setSelectedComputerId(null);
-        setView("home");
+        goHome();
       }
     } catch {}
   }, []);
 
   const handleSwitchWorkspace = useCallback((id: string) => {
     setActiveWorkspaceId(id);
-    setSelectedComputerId(null);
-    setView("home");
+    goHome();
     // Reload computers for this workspace
     fetch("/api/computers")
       .then((r) => r.json())
@@ -180,25 +187,32 @@ export function DashboardShell({
 
   const selectedComputer = computers.find((c) => c.id === selectedComputerId) || null;
 
+  const goHome = useCallback(() => {
+    setSelectedComputerId(null);
+    setView("home");
+    router.push("/dashboard", { scroll: false });
+  }, [router]);
+
   const handleSelectComputer = useCallback((id: string) => {
     setSelectedComputerId(id);
     setView("computer");
-  }, []);
+    router.push(`/dashboard?computer=${id}`, { scroll: false });
+  }, [router]);
 
   const handleCreated = useCallback((computer: Computer) => {
     setComputers((prev) => [computer, ...prev]);
     setSelectedComputerId(computer.id);
     setView("computer");
     setShowCreate(false);
-  }, []);
+    router.push(`/dashboard?computer=${computer.id}`, { scroll: false });
+  }, [router]);
 
   const handleDelete = useCallback(async () => {
     if (!selectedComputerId) return;
     try {
       await fetch(`/api/computers/${selectedComputerId}`, { method: "DELETE" });
       setComputers((prev) => prev.filter((c) => c.id !== selectedComputerId));
-      setSelectedComputerId(null);
-      setView("home");
+      goHome();
     } catch {}
   }, [selectedComputerId]);
 
@@ -267,7 +281,7 @@ export function DashboardShell({
         {/* Home */}
         <div style={{ padding: "8px 8px 4px" }}>
           <button
-            onClick={() => { setView("home"); setSelectedComputerId(null); }}
+            onClick={goHome}
             className="w-full text-left flex items-center justify-between transition-colors"
             style={{
               padding: "8px 10px",
@@ -373,7 +387,7 @@ export function DashboardShell({
               <DesktopViewer
                 computerId={selectedComputer.id}
                 computerName={selectedComputer.name}
-                onClose={() => setView("home")}
+                onClose={goHome}
                 inline
               />
             </div>
@@ -404,7 +418,7 @@ export function DashboardShell({
           onDeleteComputer={(id) => {
             fetch(`/api/computers/${id}`, { method: "DELETE" });
             setComputers((prev) => prev.filter((c) => c.id !== id));
-            if (selectedComputerId === id) { setSelectedComputerId(null); setView("home"); }
+            if (selectedComputerId === id) { goHome(); }
           }}
           onRenameComputer={(id, name) => {
             setComputers((prev) => prev.map((c) => c.id === id ? { ...c, name } : c));
