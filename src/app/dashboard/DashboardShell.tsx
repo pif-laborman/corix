@@ -9,6 +9,7 @@ import { DesktopViewer } from "./DesktopViewer";
 import { CreateComputerPopover } from "./CreateComputerPopover";
 import { ComputerMenu } from "./ComputerMenu";
 import { ComputerSettings } from "./ComputerSettings";
+import { HomeGrid } from "./HomeGrid";
 
 interface Profile {
   id: string;
@@ -351,20 +352,12 @@ export function DashboardShell({
             </section>
           </div>
         ) : (
-          /* Home / welcome */
-          <div className="flex-1 flex items-center justify-center">
-            <div className="text-center">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--border)" strokeWidth="1" className="mx-auto" style={{ marginBottom: "var(--space-4)" }}>
-                <rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" />
-              </svg>
-              <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "var(--text-lg)", marginBottom: "var(--space-2)" }}>
-                Welcome to your workspace
-              </h2>
-              <p style={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)", marginBottom: "var(--space-6)", maxWidth: 360 }}>
-                Press <kbd style={{ padding: "1px 6px", borderRadius: "var(--radius-sm)", border: "1px solid var(--border)", fontFamily: "var(--font-mono)", fontSize: "var(--text-xs)" }}>N</kbd> or click &ldquo;New computer&rdquo; in the sidebar to spin up your first machine.
-              </p>
-            </div>
-          </div>
+          /* Home: computer grid with top bar */
+          <HomeGrid
+            computers={computers}
+            onSelectComputer={handleSelectComputer}
+            onCreated={handleCreated}
+          />
         )}
       </div>
 
