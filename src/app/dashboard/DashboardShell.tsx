@@ -7,6 +7,7 @@ import { SignOutButton } from "./SignOutButton";
 import { ApiKeysPanel } from "./ApiKeysPanel";
 import { DesktopViewer } from "./DesktopViewer";
 import { CreateComputerPopover } from "./CreateComputerPopover";
+import { ComputerMenu } from "./ComputerMenu";
 
 interface Profile {
   id: string;
@@ -143,6 +144,27 @@ export function DashboardShell({
     setView("computer");
     setShowCreate(false);
   }, []);
+
+  const handleDelete = useCallback(async () => {
+    if (!selectedComputerId) return;
+    try {
+      await fetch(`/api/computers/${selectedComputerId}`, { method: "DELETE" });
+      setComputers((prev) => prev.filter((c) => c.id !== selectedComputerId));
+      setSelectedComputerId(null);
+      setView("home");
+    } catch {}
+  }, [selectedComputerId]);
+
+  const handleRestart = useCallback(async () => {
+    if (!selectedComputerId) return;
+    setComputers((prev) => prev.map((c) => c.id === selectedComputerId ? { ...c, status: "restarting" } : c));
+    try {
+      await fetch(`/api/computers/${selectedComputerId}/restart`, { method: "POST" });
+      setTimeout(() => {
+        setComputers((prev) => prev.map((c) => c.id === selectedComputerId ? { ...c, status: "running" } : c));
+      }, 3000);
+    } catch {}
+  }, [selectedComputerId]);
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
@@ -287,9 +309,12 @@ export function DashboardShell({
                   {selectedComputer.name}
                 </span>
               </div>
-              <button className="hover:opacity-70 transition-opacity" style={{ color: "var(--text-tertiary)", fontSize: "var(--text-lg)", lineHeight: 1 }}>
-                &#x2026;
-              </button>
+              <ComputerMenu
+                computerId={selectedComputer.id}
+                computerName={selectedComputer.name}
+                onDelete={handleDelete}
+                onRestart={handleRestart}
+              />
             </div>
 
             {/* Desktop: edge-to-edge, minimal padding */}
