@@ -277,6 +277,7 @@ export function DashboardShell({
           onSettings={() => setSettingsTab("workspace")}
           onSwitchWorkspace={handleSwitchWorkspace}
           onCreateWorkspace={handleCreateWorkspace}
+          activeWorkspaceIconUrl={activeWorkspace?.icon_url || null}
         />
 
         {/* Home */}

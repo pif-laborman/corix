@@ -21,9 +21,10 @@ interface Props {
   onSettings: () => void;
   onSwitchWorkspace: (id: string) => void;
   onCreateWorkspace: (name: string) => void;
+  activeWorkspaceIconUrl?: string | null;
 }
 
-export function WorkspaceMenu({ displayName, initials, email, plan, workspaces, activeWorkspaceId, activeWorkspaceName, onSettings, onSwitchWorkspace, onCreateWorkspace }: Props) {
+export function WorkspaceMenu({ displayName, initials, email, plan, workspaces, activeWorkspaceId, activeWorkspaceName, onSettings, onSwitchWorkspace, onCreateWorkspace, activeWorkspaceIconUrl }: Props) {
   const [open, setOpen] = useState(false);
   const [showNewWs, setShowNewWs] = useState(false);
   const [newWsName, setNewWsName] = useState("");
@@ -85,8 +86,12 @@ export function WorkspaceMenu({ displayName, initials, email, plan, workspaces, 
         className="w-full flex items-center gap-2 transition-colors hover:opacity-80"
         style={{ padding: "14px 16px", borderBottom: "1px solid var(--border)", cursor: "pointer", background: "transparent", border: "none", textAlign: "left" }}
       >
-        <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0" style={{ background: "var(--fill-action)", color: "var(--text-on-action)", fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "var(--text-xs)" }}>
-          {sidebarInitial}
+        <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0 overflow-hidden" style={{ background: "var(--fill-action)", color: "var(--text-on-action)", fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "var(--text-xs)" }}>
+          {activeWorkspaceIconUrl ? (
+            <img src={activeWorkspaceIconUrl} alt="" className="w-full h-full object-cover" />
+          ) : (
+            sidebarInitial
+          )}
         </div>
         <span className="truncate flex-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "var(--text-sm)" }}>
           {sidebarLabel}
