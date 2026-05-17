@@ -157,8 +157,13 @@ const server = http.createServer(async (req, res) => {
     return sendJson(res, 401, { error: "Invalid or missing API key" });
   }
 
-  // Rate limiting (check and increment)
-  try {
+  // Skip rate limiting for internal server-to-server calls
+  const authHeader = req.headers["authorization"] || "";
+  const authToken = authHeader.replace("Bearer ", "");
+  const isInternal = authToken === INTERNAL_TOKEN;
+
+  // Rate limiting (skip for internal calls)
+  if (!isInternal) { try {
     const profileRes = await fetch(
       `${SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}&select=api_calls_today,api_calls_reset_at,plan`,
       { headers: { apikey: SUPABASE_SERVICE_KEY, Authorization: `Bearer ${SUPABASE_SERVICE_KEY}` } }
@@ -180,7 +185,7 @@ const server = http.createServer(async (req, res) => {
           body: JSON.stringify({ api_calls_today: 1, api_calls_reset_at: now.toISOString() }),
         });
       } else {
-        const limit = p.plan === "starter" ? 1000 : 999999;
+        const limit = p.plan === "starter" ? 50000 : 999999;
         if (calls >= limit) {
           return sendJson(res, 429, { error: "Rate limit exceeded. Upgrade your plan for unlimited API calls." });
         }
@@ -192,7 +197,7 @@ const server = http.createServer(async (req, res) => {
         }).catch(() => {});
       }
     }
-  } catch {} // Don't block on rate limit failures
+  } catch {} } // Don't block on rate limit failures
 
   // GET /v1/workspaces
   if (req.method === "GET" && url.pathname === "/v1/workspaces") {
