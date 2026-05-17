@@ -70,37 +70,33 @@ function SidebarThumbnail({ computer, selected, onClick }: {
       onClick={onClick}
       className="w-full text-left transition-all"
       style={{
-        padding: "6px",
+        padding: "8px",
         borderRadius: "var(--radius-md)",
         border: selected ? "2px solid var(--fill-action)" : "2px solid transparent",
         background: selected ? "var(--bg-page)" : "transparent",
+        marginBottom: "var(--space-2)",
       }}
     >
-      {/* Thumbnail */}
+      {/* Thumbnail: full width, large aspect ratio */}
       <div
         className="w-full overflow-hidden flex items-center justify-center"
         style={{
           aspectRatio: "16/10",
-          borderRadius: "var(--radius-sm)",
+          borderRadius: "6px",
           background: "#1a1a2e",
         }}
       >
         {thumbUrl ? (
-          <img
-            src={thumbUrl}
-            alt={computer.name}
-            className="w-full h-full object-cover"
-            draggable={false}
-          />
+          <img src={thumbUrl} alt={computer.name} className="w-full h-full object-cover" draggable={false} />
         ) : (
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="1">
             <rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" />
           </svg>
         )}
       </div>
-      {/* Name */}
-      <div className="flex items-center justify-between" style={{ marginTop: "var(--space-1)", padding: "0 2px" }}>
-        <span className="truncate" style={{ fontSize: "var(--text-xs)", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--text-primary)" }}>
+      {/* Name + status */}
+      <div className="flex items-center justify-between" style={{ marginTop: "6px", padding: "0 2px" }}>
+        <span className="truncate" style={{ fontSize: "var(--text-xs)", fontFamily: "var(--font-display)", fontWeight: 500, color: selected ? "var(--text-primary)" : "var(--text-secondary)" }}>
           {computer.name}
         </span>
         {computer.status === "running" && (
@@ -148,15 +144,11 @@ export function DashboardShell({
     setShowCreate(false);
   }, []);
 
-  // Keyboard shortcut: N to create
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
-      if (e.key === "n" || e.key === "N") {
-        const target = e.target as HTMLElement;
-        if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.tagName === "SELECT") return;
-        e.preventDefault();
-        setShowCreate(true);
-      }
+      const target = e.target as HTMLElement;
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.tagName === "SELECT") return;
+      if (e.key === "n" || e.key === "N") { e.preventDefault(); setShowCreate(true); }
     }
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
@@ -164,24 +156,14 @@ export function DashboardShell({
 
   return (
     <div className="min-h-screen flex" style={{ background: "var(--bg-page)" }}>
-      {/* Sidebar */}
+      {/* Sidebar: wider (280px) for bigger thumbnails */}
       <aside
         className="shrink-0 flex flex-col"
-        style={{
-          width: 240,
-          borderRight: "1px solid var(--border)",
-          background: "var(--bg-surface)",
-        }}
+        style={{ width: 280, borderRight: "1px solid var(--border)", background: "var(--bg-surface)" }}
       >
-        {/* Workspace selector */}
-        <div
-          className="flex items-center gap-2 cursor-default"
-          style={{ padding: "14px 16px", borderBottom: "1px solid var(--border)" }}
-        >
-          <div
-            className="w-7 h-7 rounded-md flex items-center justify-center shrink-0"
-            style={{ background: "var(--fill-action)", color: "var(--text-on-action)", fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "var(--text-xs)" }}
-          >
+        {/* Workspace header */}
+        <div className="flex items-center gap-2 cursor-default" style={{ padding: "14px 16px", borderBottom: "1px solid var(--border)" }}>
+          <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0" style={{ background: "var(--fill-action)", color: "var(--text-on-action)", fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "var(--text-xs)" }}>
             {initials}
           </div>
           <span className="truncate" style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "var(--text-sm)" }}>
@@ -189,10 +171,10 @@ export function DashboardShell({
           </span>
         </div>
 
-        {/* Home nav */}
-        <div style={{ padding: "8px" }}>
+        {/* Home */}
+        <div style={{ padding: "8px 8px 4px" }}>
           <button
-            onClick={() => setView("home")}
+            onClick={() => { setView("home"); setSelectedComputerId(null); }}
             className="w-full text-left flex items-center justify-between transition-colors"
             style={{
               padding: "8px 10px",
@@ -200,8 +182,8 @@ export function DashboardShell({
               fontSize: "var(--text-sm)",
               fontFamily: "var(--font-body)",
               fontWeight: view === "home" ? 500 : 400,
-              color: view === "home" ? "var(--text-primary)" : "var(--text-secondary)",
-              background: view === "home" ? "var(--bg-page)" : "transparent",
+              color: view === "home" && !selectedComputerId ? "var(--text-primary)" : "var(--text-secondary)",
+              background: view === "home" && !selectedComputerId ? "var(--bg-page)" : "transparent",
             }}
           >
             <span className="flex items-center gap-2">
@@ -218,7 +200,7 @@ export function DashboardShell({
         </div>
 
         {/* Computer thumbnails */}
-        <div className="flex-1 overflow-y-auto" style={{ padding: "0 8px 8px" }}>
+        <div className="flex-1 overflow-y-auto" style={{ padding: "4px 8px 8px" }}>
           {computers.map((c) => (
             <SidebarThumbnail
               key={c.id}
@@ -228,16 +210,16 @@ export function DashboardShell({
             />
           ))}
 
-          {/* New computer button */}
+          {/* New computer */}
           <div className="relative">
             <button
               onClick={() => setShowCreate(true)}
               className="w-full flex items-center justify-center gap-2 transition-colors hover:opacity-70"
               style={{
-                padding: "var(--space-6) var(--space-4)",
+                padding: "var(--space-8) var(--space-4)",
                 borderRadius: "var(--radius-md)",
                 border: "1px dashed var(--border)",
-                marginTop: "var(--space-2)",
+                marginTop: "var(--space-1)",
                 background: "transparent",
                 cursor: "pointer",
               }}
@@ -253,15 +235,12 @@ export function DashboardShell({
               </kbd>
             </button>
             {showCreate && (
-              <CreateComputerPopover
-                onClose={() => setShowCreate(false)}
-                onCreated={handleCreated}
-              />
+              <CreateComputerPopover onClose={() => setShowCreate(false)} onCreated={handleCreated} />
             )}
           </div>
         </div>
 
-        {/* Bottom: settings + plan */}
+        {/* Bottom */}
         <div style={{ padding: "8px", borderTop: "1px solid var(--border)" }}>
           <button
             onClick={() => setView("settings")}
@@ -295,36 +274,25 @@ export function DashboardShell({
       <div className="flex-1 flex flex-col min-w-0">
         {view === "computer" && selectedComputer ? (
           <>
-            {/* Computer top bar */}
+            {/* Minimal top bar: just name + "..." */}
             <div
               className="shrink-0 flex items-center justify-between"
-              style={{ padding: "10px 24px", borderBottom: "1px solid var(--border)" }}
+              style={{ padding: "10px 20px", borderBottom: "1px solid var(--border)" }}
             >
-              <div className="flex items-center gap-3">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="1.5" strokeLinecap="round">
+              <div className="flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" strokeWidth="1.5" strokeLinecap="round">
                   <rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" />
                 </svg>
                 <span style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "var(--text-sm)" }}>
                   {selectedComputer.name}
                 </span>
-                <span className="flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full" style={{ background: selectedComputer.status === "running" ? "#03A97E" : "#999" }} />
-                  <span style={{ fontSize: "var(--text-xs)", color: selectedComputer.status === "running" ? "#03A97E" : "var(--text-tertiary)" }}>
-                    {selectedComputer.status}
-                  </span>
-                </span>
               </div>
-              <div className="flex items-center gap-3">
-                <span style={{ fontSize: "var(--text-xs)", color: "var(--text-tertiary)", fontFamily: "var(--font-mono)" }}>
-                  {selectedComputer.cpu} vCPU / {selectedComputer.ram} GB
-                </span>
-                <Link href="/docs" className="hover:opacity-70 transition-opacity" style={{ fontSize: "var(--text-xs)", color: "var(--text-secondary)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
-                  Docs
-                </Link>
-              </div>
+              <button className="hover:opacity-70 transition-opacity" style={{ color: "var(--text-tertiary)", fontSize: "var(--text-lg)", lineHeight: 1 }}>
+                &#x2026;
+              </button>
             </div>
 
-            {/* Inline desktop viewer */}
+            {/* Desktop: edge-to-edge, minimal padding */}
             <div className="flex-1 overflow-hidden" style={{ background: "#0a0a0f" }}>
               <DesktopViewer
                 computerId={selectedComputer.id}
@@ -336,18 +304,12 @@ export function DashboardShell({
           </>
         ) : view === "settings" ? (
           <div className="flex-1 overflow-auto" style={{ padding: "24px" }}>
-            <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "var(--text-lg)", marginBottom: "var(--space-6)" }}>
-              Settings
-            </h2>
+            <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "var(--text-lg)", marginBottom: "var(--space-6)" }}>Settings</h2>
             <section style={{ marginBottom: "var(--space-10)" }}>
-              <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "var(--text-base)", marginBottom: "var(--space-4)" }}>
-                Profile
-              </h3>
+              <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "var(--text-base)", marginBottom: "var(--space-4)" }}>Profile</h3>
               <div className="card" style={{ padding: "var(--space-4)" }}>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "var(--fill-action)", color: "var(--text-on-action)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
-                    {initials}
-                  </div>
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "var(--fill-action)", color: "var(--text-on-action)", fontFamily: "var(--font-display)", fontWeight: 500 }}>{initials}</div>
                   <div>
                     <div style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "var(--text-sm)" }}>{displayName}</div>
                     <div style={{ fontSize: "var(--text-xs)", color: "var(--text-tertiary)" }}>{user.email}</div>
@@ -356,15 +318,13 @@ export function DashboardShell({
               </div>
             </section>
             <section>
-              <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "var(--text-base)", marginBottom: "var(--space-4)" }}>
-                API Keys
-              </h3>
+              <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "var(--text-base)", marginBottom: "var(--space-4)" }}>API Keys</h3>
               <ApiKeysPanel initialKeys={initialApiKeys} />
             </section>
           </div>
         ) : (
-          /* Home / empty state */
-          <div className="flex-1 flex items-center justify-center" style={{ padding: "24px" }}>
+          /* Home / welcome */
+          <div className="flex-1 flex items-center justify-center">
             <div className="text-center">
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--border)" strokeWidth="1" className="mx-auto" style={{ marginBottom: "var(--space-4)" }}>
                 <rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" />

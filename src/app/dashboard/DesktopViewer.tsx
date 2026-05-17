@@ -90,7 +90,7 @@ export function DesktopViewer({ computerId, computerName, onClose, inline }: Pro
         className="w-full h-full flex items-center justify-center outline-none"
         tabIndex={0}
         onKeyDown={handleKeyDown}
-        style={{ padding: "16px" }}
+        style={{ padding: "8px" }}
       >
         {loading && !screenshotUrl ? (
           <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "var(--text-sm)" }}>Starting desktop...</div>
