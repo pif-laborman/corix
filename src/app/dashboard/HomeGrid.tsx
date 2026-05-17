@@ -85,20 +85,26 @@ function NewComputerCard({ onClick }: { onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className="flex flex-col items-center justify-center transition-all hover:shadow-md"
+      className="flex flex-col transition-all hover:shadow-md"
       style={{
         borderRadius: "var(--radius-md)",
         border: "1px dashed var(--border)",
         background: "var(--bg-page)",
-        aspectRatio: "16/12",
         cursor: "pointer",
-        gap: "var(--space-3)",
+        overflow: "hidden",
       }}
     >
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" strokeWidth="1.5" strokeLinecap="round">
-        <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-      </svg>
-      <div className="flex items-center gap-2">
+      {/* Match screenshot area height */}
+      <div
+        className="w-full flex items-center justify-center"
+        style={{ aspectRatio: "16/10", background: "var(--bg-surface)" }}
+      >
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" strokeWidth="1.5" strokeLinecap="round">
+          <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+      </div>
+      {/* Match info bar */}
+      <div className="flex items-center gap-2 justify-center" style={{ padding: "8px 12px" }}>
         <span style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>
           New Computer
         </span>

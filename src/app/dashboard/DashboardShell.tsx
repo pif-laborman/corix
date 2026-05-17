@@ -299,26 +299,26 @@ export function DashboardShell({
       <div className="flex-1 flex flex-col min-w-0">
         {view === "computer" && selectedComputer ? (
           <>
-            {/* Minimal top bar: just name + "..." */}
+            {/* Minimal top bar: name + "..." together */}
             <div
-              className="shrink-0 flex items-center justify-between"
+              className="shrink-0 flex items-center justify-center"
               style={{ padding: "10px 20px", borderBottom: "1px solid var(--border)" }}
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" strokeWidth="1.5" strokeLinecap="round">
                   <rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" />
                 </svg>
                 <span style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "var(--text-sm)" }}>
                   {selectedComputer.name}
                 </span>
+                <ComputerMenu
+                  computerId={selectedComputer.id}
+                  computerName={selectedComputer.name}
+                  onDelete={handleDelete}
+                  onRestart={handleRestart}
+                  onSettings={() => setShowSettings(true)}
+                />
               </div>
-              <ComputerMenu
-                computerId={selectedComputer.id}
-                computerName={selectedComputer.name}
-                onDelete={handleDelete}
-                onRestart={handleRestart}
-                onSettings={() => setShowSettings(true)}
-              />
             </div>
 
             {/* Desktop: edge-to-edge, minimal padding */}
