@@ -55,55 +55,54 @@ const plans = [
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-[#09090b] text-white">
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06] bg-[#09090b]/80 backdrop-blur-xl">
-        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
-                <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                <path d="M2 17l10 5 10-5" />
-                <path d="M2 12l10 5 10-5" />
+    <div className="min-h-screen" style={{ background: 'var(--bg-page)', color: 'var(--text-primary)' }}>
+      <nav className="fixed top-0 left-0 right-0 z-50" style={{ borderBottom: '1px solid var(--border)', background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(16px)' }}>
+        <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2" style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'var(--text-sm)' }}>
+            <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: 'var(--fill-action)' }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
               </svg>
             </div>
-            <span className="text-[15px] font-semibold tracking-tight">Vessel</span>
+            Vessel
           </Link>
           <div className="hidden sm:flex items-center gap-6">
-            <Link href="/docs" className="text-[13px] text-zinc-400 hover:text-white transition-colors">Docs</Link>
-            <Link href="/pricing" className="text-[13px] text-white font-medium">Pricing</Link>
-            <Link href="/login" className="text-[13px] font-medium text-white bg-indigo-600 hover:bg-indigo-500 px-4 py-1.5 rounded-lg transition-colors">
-              Start building
-            </Link>
+            <Link href="/docs" className="hover:opacity-70 transition-opacity" style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>Docs</Link>
+            <Link href="/pricing" style={{ fontSize: 'var(--text-sm)', fontWeight: 500, fontFamily: 'var(--font-display)' }}>Pricing</Link>
+            <Link href="/login" className="btn-primary" style={{ padding: '6px 16px', fontSize: 'var(--text-sm)' }}>Start building</Link>
           </div>
         </div>
       </nav>
 
-      <main className="max-w-5xl mx-auto px-6 pt-32 pb-24">
-        <div className="text-center mb-16">
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-3">Simple, transparent pricing</h1>
-          <p className="text-zinc-400 text-[15px]">Start free. Scale as your agent fleet grows.</p>
+      <main className="max-w-4xl mx-auto px-6" style={{ paddingTop: 128, paddingBottom: 'var(--space-16)' }}>
+        <div className="text-center" style={{ marginBottom: 'var(--space-12)' }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'var(--text-3xl)', letterSpacing: '-0.02em', marginBottom: 'var(--space-3)' }}>
+            Simple, transparent pricing
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-base)' }}>Start free. Scale as your agent fleet grows.</p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-4">
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`rounded-xl border p-6 flex flex-col ${
-                plan.highlight
-                  ? "border-indigo-500/40 bg-indigo-500/[0.03] ring-1 ring-indigo-500/20"
-                  : "border-white/[0.06] bg-[#111113]"
-              }`}
+              className="card flex flex-col"
+              style={{
+                padding: 'var(--space-6)',
+                borderColor: plan.highlight ? 'var(--fill-action)' : undefined,
+                borderWidth: plan.highlight ? 2 : undefined,
+              }}
             >
-              <h3 className="text-lg font-semibold mb-1">{plan.name}</h3>
-              <p className="text-[13px] text-zinc-500 mb-4">{plan.description}</p>
-              <div className="mb-6">
-                <span className="text-3xl font-bold">{plan.price}</span>
-                {plan.period && <span className="text-zinc-500 text-[14px]">{plan.period}</span>}
+              <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'var(--text-lg)', marginBottom: 'var(--space-1)' }}>{plan.name}</h3>
+              <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)', marginBottom: 'var(--space-4)' }}>{plan.description}</p>
+              <div style={{ marginBottom: 'var(--space-6)' }}>
+                <span style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'var(--text-3xl)' }}>{plan.price}</span>
+                {plan.period && <span style={{ color: 'var(--text-tertiary)', fontSize: 'var(--text-sm)' }}>{plan.period}</span>}
               </div>
-              <ul className="space-y-2.5 mb-8 flex-1">
+              <ul className="flex-1" style={{ marginBottom: 'var(--space-8)' }}>
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2 text-[13px] text-zinc-300">
-                    <svg className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                  <li key={feature} className="flex items-start gap-2" style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', marginBottom: 'var(--space-2)' }}>
+                    <svg className="shrink-0" style={{ marginTop: 2, color: 'var(--color-success)' }} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                       <path d="M5 12l5 5L20 7" />
                     </svg>
                     {feature}
@@ -112,11 +111,8 @@ export default function PricingPage() {
               </ul>
               <Link
                 href="/login"
-                className={`text-center text-[13px] font-medium py-2.5 rounded-lg transition-colors ${
-                  plan.highlight
-                    ? "bg-indigo-600 hover:bg-indigo-500 text-white"
-                    : "border border-white/[0.1] hover:border-white/[0.2] text-zinc-300"
-                }`}
+                className={plan.highlight ? 'btn-primary' : 'btn-outline'}
+                style={{ textAlign: 'center', width: '100%' }}
               >
                 {plan.cta}
               </Link>

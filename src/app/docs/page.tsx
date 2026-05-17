@@ -14,19 +14,15 @@ const sections = [
     items: [
       { label: "Computers", href: "#computers" },
       { label: "The agent loop", href: "#agent-loop" },
-      { label: "Actions", href: "#actions" },
-      { label: "Screenshots", href: "#screenshots" },
     ],
   },
   {
     title: "API reference",
     items: [
       { label: "Create computer", href: "#create-computer" },
-      { label: "List computers", href: "#list-computers" },
       { label: "Take screenshot", href: "#take-screenshot" },
       { label: "Perform action", href: "#perform-action" },
       { label: "Execute bash", href: "#execute-bash" },
-      { label: "Delete computer", href: "#delete-computer" },
     ],
   },
   {
@@ -40,47 +36,65 @@ const sections = [
 
 function CodeBlock({ title, code }: { title: string; code: string }) {
   return (
-    <div className="rounded-lg border border-white/[0.08] bg-[#111113] overflow-hidden my-4">
-      <div className="px-4 py-2 border-b border-white/[0.06] bg-[#0c0c0e]">
-        <span className="text-[11px] text-zinc-500 font-mono">{title}</span>
+    <div style={{ borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', marginTop: 'var(--space-4)', marginBottom: 'var(--space-4)', overflow: 'hidden' }}>
+      <div style={{ padding: '8px 16px', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)' }}>
+        <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', fontFamily: 'var(--font-mono)' }}>{title}</span>
       </div>
-      <pre className="p-4 text-[13px] leading-[1.6] font-mono text-zinc-300 overflow-x-auto">
+      <pre style={{ padding: 'var(--space-4)', fontSize: 'var(--text-sm)', lineHeight: 1.6, fontFamily: 'var(--font-mono)', background: 'var(--bg-page)', overflowX: 'auto', color: 'var(--text-primary)' }}>
         {code}
       </pre>
     </div>
   );
 }
 
+function Endpoint({ method, path }: { method: string; path: string }) {
+  return (
+    <code style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: 6,
+      fontSize: 'var(--text-sm)',
+      fontFamily: 'var(--font-mono)',
+      background: 'var(--bg-surface)',
+      padding: '2px 8px',
+      borderRadius: 'var(--radius-sm)',
+      border: '1px solid var(--border)',
+    }}>
+      <span style={{ color: 'var(--color-success)', fontWeight: 500 }}>{method}</span>
+      <span style={{ color: 'var(--text-primary)' }}>{path}</span>
+    </code>
+  );
+}
+
 export default function DocsPage() {
   return (
-    <div className="min-h-screen bg-[#09090b] text-white">
-      {/* Nav */}
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06] bg-[#09090b]/80 backdrop-blur-xl">
-        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
-                <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                <path d="M2 17l10 5 10-5" />
-                <path d="M2 12l10 5 10-5" />
+    <div className="min-h-screen" style={{ background: 'var(--bg-page)', color: 'var(--text-primary)' }}>
+      <nav className="fixed top-0 left-0 right-0 z-50" style={{ borderBottom: '1px solid var(--border)', background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(16px)' }}>
+        <div className="max-w-5xl mx-auto px-6 h-14 flex items-center">
+          <Link href="/" className="flex items-center gap-2" style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'var(--text-sm)' }}>
+            <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: 'var(--fill-action)' }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
               </svg>
             </div>
-            <span className="text-[15px] font-semibold tracking-tight">Vessel</span>
-            <span className="text-[13px] text-zinc-500 ml-1">Docs</span>
+            Vessel
           </Link>
+          <span style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)', marginLeft: 'var(--space-2)' }}>Docs</span>
         </div>
       </nav>
 
-      <div className="max-w-6xl mx-auto px-6 pt-20 flex gap-12">
+      <div className="max-w-5xl mx-auto px-6 flex gap-12" style={{ paddingTop: 80 }}>
         {/* Sidebar */}
-        <aside className="hidden lg:block w-56 shrink-0 sticky top-20 self-start max-h-[calc(100vh-5rem)] overflow-y-auto py-8">
+        <aside className="hidden lg:block w-48 shrink-0 sticky top-20 self-start overflow-y-auto" style={{ paddingTop: 'var(--space-8)', paddingBottom: 'var(--space-8)', maxHeight: 'calc(100vh - 5rem)' }}>
           {sections.map((section) => (
-            <div key={section.title} className="mb-6">
-              <h4 className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider mb-2">{section.title}</h4>
-              <ul className="space-y-1">
+            <div key={section.title} style={{ marginBottom: 'var(--space-6)' }}>
+              <h4 style={{ fontSize: 'var(--text-xs)', fontWeight: 500, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 'var(--space-2)', fontFamily: 'var(--font-display)' }}>
+                {section.title}
+              </h4>
+              <ul>
                 {section.items.map((item) => (
                   <li key={item.href}>
-                    <a href={item.href} className="text-[13px] text-zinc-400 hover:text-white transition-colors block py-0.5">
+                    <a href={item.href} className="block hover:opacity-70 transition-opacity" style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', padding: '2px 0' }}>
                       {item.label}
                     </a>
                   </li>
@@ -91,26 +105,27 @@ export default function DocsPage() {
         </aside>
 
         {/* Content */}
-        <main className="flex-1 min-w-0 py-8 pb-24">
-          <h1 id="introduction" className="text-3xl font-bold tracking-tight mb-4">Introduction</h1>
-          <p className="text-zinc-400 text-[15px] leading-relaxed mb-6">
+        <main className="flex-1 min-w-0" style={{ paddingTop: 'var(--space-8)', paddingBottom: 'var(--space-16)' }}>
+          <h1 id="introduction" style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'var(--text-3xl)', letterSpacing: '-0.02em', marginBottom: 'var(--space-4)' }}>
+            Introduction
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-base)', lineHeight: 1.7, marginBottom: 'var(--space-4)' }}>
             Vessel provides cloud-based desktop infrastructure for AI agents. Spin up a virtual machine,
             connect any AI model, and let it autonomously control the computer through screenshots, mouse
             clicks, keyboard input, and shell commands.
           </p>
-          <p className="text-zinc-400 text-[15px] leading-relaxed mb-8">
+          <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-base)', lineHeight: 1.7, marginBottom: 'var(--space-8)' }}>
             Vessel is a plain HTTP API. Any language with an HTTP client works. We also provide Python and
             TypeScript SDKs for convenience.
           </p>
 
-          <h2 id="quickstart" className="text-2xl font-bold tracking-tight mb-4 mt-12 pt-8 border-t border-white/[0.04]">Quickstart</h2>
-          <p className="text-zinc-400 text-[15px] leading-relaxed mb-4">
+          <h2 id="quickstart" style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'var(--text-2xl)', marginBottom: 'var(--space-4)', marginTop: 'var(--space-12)', paddingTop: 'var(--space-8)', borderTop: '1px solid var(--border)' }}>
+            Quickstart
+          </h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-base)', lineHeight: 1.7, marginBottom: 'var(--space-4)' }}>
             Get a computer running in three lines of code:
           </p>
-
-          <CodeBlock
-            title="Python"
-            code={`import vessel
+          <CodeBlock title="Python" code={`import vessel
 
 # Create a computer (boots in <500ms)
 computer = vessel.create(os="linux", cpu=2, ram="8gb")
@@ -121,12 +136,8 @@ result = computer.prompt(
     task="Open the browser and search for 'Vessel AI'"
 )
 
-print(result.output)`}
-          />
-
-          <CodeBlock
-            title="cURL"
-            code={`# Create a computer
+print(result.output)`} />
+          <CodeBlock title="cURL" code={`# Create a computer
 curl -X POST https://api.vessel.dev/v1/computers \\
   -H "Authorization: Bearer vsl_your_api_key" \\
   -H "Content-Type: application/json" \\
@@ -135,147 +146,108 @@ curl -X POST https://api.vessel.dev/v1/computers \\
 # Take a screenshot
 curl https://api.vessel.dev/v1/computers/{id}/screenshot \\
   -H "Authorization: Bearer vsl_your_api_key" \\
-  --output screenshot.png
+  --output screenshot.png`} />
 
-# Click at coordinates
-curl -X POST https://api.vessel.dev/v1/computers/{id}/actions \\
-  -H "Authorization: Bearer vsl_your_api_key" \\
-  -d '{"type": "click", "x": 500, "y": 300}'`}
-          />
-
-          <h2 id="authentication" className="text-2xl font-bold tracking-tight mb-4 mt-12 pt-8 border-t border-white/[0.04]">Authentication</h2>
-          <p className="text-zinc-400 text-[15px] leading-relaxed mb-4">
+          <h2 id="authentication" style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'var(--text-2xl)', marginBottom: 'var(--space-4)', marginTop: 'var(--space-12)', paddingTop: 'var(--space-8)', borderTop: '1px solid var(--border)' }}>
+            Authentication
+          </h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-base)', lineHeight: 1.7, marginBottom: 'var(--space-4)' }}>
             All API requests require a Bearer token. Get your API key from the dashboard after signing up.
           </p>
-          <CodeBlock
-            title="Header format"
-            code={`Authorization: Bearer vsl_your_api_key`}
-          />
+          <CodeBlock title="Header format" code={`Authorization: Bearer vsl_your_api_key`} />
 
-          <h2 id="computers" className="text-2xl font-bold tracking-tight mb-4 mt-12 pt-8 border-t border-white/[0.04]">Computers</h2>
-          <p className="text-zinc-400 text-[15px] leading-relaxed mb-4">
+          <h2 id="computers" style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'var(--text-2xl)', marginBottom: 'var(--space-4)', marginTop: 'var(--space-12)', paddingTop: 'var(--space-8)', borderTop: '1px solid var(--border)' }}>
+            Computers
+          </h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-base)', lineHeight: 1.7, marginBottom: 'var(--space-4)' }}>
             A computer is a virtual machine with a full desktop environment. Each computer has its own
-            filesystem, display, and network. Computers can be ephemeral (destroyed after use) or persistent
-            (kept running with saved state).
+            filesystem, display, and network.
           </p>
-          <div className="rounded-lg border border-white/[0.08] bg-[#111113] p-4 my-4">
-            <table className="w-full text-[13px]">
+          <div className="card" style={{ marginTop: 'var(--space-4)', marginBottom: 'var(--space-4)', overflowX: 'auto' }}>
+            <table className="w-full" style={{ fontSize: 'var(--text-sm)' }}>
               <thead>
-                <tr className="text-left text-zinc-500 border-b border-white/[0.06]">
-                  <th className="pb-2 font-medium">Field</th>
-                  <th className="pb-2 font-medium">Type</th>
-                  <th className="pb-2 font-medium">Description</th>
+                <tr style={{ borderBottom: '1px solid var(--border)', textAlign: 'left', color: 'var(--text-tertiary)' }}>
+                  <th style={{ paddingBottom: 'var(--space-2)', fontWeight: 500 }}>Field</th>
+                  <th style={{ paddingBottom: 'var(--space-2)', fontWeight: 500 }}>Type</th>
+                  <th style={{ paddingBottom: 'var(--space-2)', fontWeight: 500 }}>Description</th>
                 </tr>
               </thead>
-              <tbody className="text-zinc-300">
-                <tr className="border-b border-white/[0.04]"><td className="py-2 font-mono text-indigo-400">id</td><td className="py-2">string</td><td className="py-2">Unique identifier</td></tr>
-                <tr className="border-b border-white/[0.04]"><td className="py-2 font-mono text-indigo-400">os</td><td className="py-2">string</td><td className="py-2">Operating system (linux)</td></tr>
-                <tr className="border-b border-white/[0.04]"><td className="py-2 font-mono text-indigo-400">cpu</td><td className="py-2">integer</td><td className="py-2">vCPU count (1-16)</td></tr>
-                <tr className="border-b border-white/[0.04]"><td className="py-2 font-mono text-indigo-400">ram</td><td className="py-2">string</td><td className="py-2">Memory (4gb-64gb)</td></tr>
-                <tr className="border-b border-white/[0.04]"><td className="py-2 font-mono text-indigo-400">status</td><td className="py-2">string</td><td className="py-2">running, stopped, terminated</td></tr>
-                <tr><td className="py-2 font-mono text-indigo-400">created_at</td><td className="py-2">string</td><td className="py-2">ISO 8601 timestamp</td></tr>
+              <tbody style={{ color: 'var(--text-secondary)' }}>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}><td style={{ padding: '8px 0', fontFamily: 'var(--font-mono)', color: 'var(--text-primary)' }}>id</td><td style={{ padding: '8px 0' }}>string</td><td style={{ padding: '8px 0' }}>Unique identifier</td></tr>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}><td style={{ padding: '8px 0', fontFamily: 'var(--font-mono)', color: 'var(--text-primary)' }}>os</td><td style={{ padding: '8px 0' }}>string</td><td style={{ padding: '8px 0' }}>Operating system</td></tr>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}><td style={{ padding: '8px 0', fontFamily: 'var(--font-mono)', color: 'var(--text-primary)' }}>cpu</td><td style={{ padding: '8px 0' }}>integer</td><td style={{ padding: '8px 0' }}>vCPU count (1-16)</td></tr>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}><td style={{ padding: '8px 0', fontFamily: 'var(--font-mono)', color: 'var(--text-primary)' }}>ram</td><td style={{ padding: '8px 0' }}>string</td><td style={{ padding: '8px 0' }}>Memory (4gb-64gb)</td></tr>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}><td style={{ padding: '8px 0', fontFamily: 'var(--font-mono)', color: 'var(--text-primary)' }}>status</td><td style={{ padding: '8px 0' }}>string</td><td style={{ padding: '8px 0' }}>running, stopped, terminated</td></tr>
+                <tr><td style={{ padding: '8px 0', fontFamily: 'var(--font-mono)', color: 'var(--text-primary)' }}>created_at</td><td style={{ padding: '8px 0' }}>string</td><td style={{ padding: '8px 0' }}>ISO 8601 timestamp</td></tr>
               </tbody>
             </table>
           </div>
 
-          <h2 id="agent-loop" className="text-2xl font-bold tracking-tight mb-4 mt-12 pt-8 border-t border-white/[0.04]">The agent loop</h2>
-          <p className="text-zinc-400 text-[15px] leading-relaxed mb-4">
-            AI agents operate on computers in a cycle: <strong className="text-white">See</strong> (screenshot),{" "}
-            <strong className="text-white">Decide</strong> (model inference),{" "}
-            <strong className="text-white">Act</strong> (click/type/execute),{" "}
-            <strong className="text-white">Repeat</strong>. The SDK handles this loop automatically with{" "}
-            <code className="text-indigo-400 bg-indigo-500/10 px-1.5 py-0.5 rounded text-[12px]">computer.prompt()</code>, or
-            you can implement it yourself with the raw API.
+          <h2 id="agent-loop" style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'var(--text-2xl)', marginBottom: 'var(--space-4)', marginTop: 'var(--space-12)', paddingTop: 'var(--space-8)', borderTop: '1px solid var(--border)' }}>
+            The agent loop
+          </h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-base)', lineHeight: 1.7 }}>
+            AI agents operate on computers in a cycle: <strong style={{ color: 'var(--text-primary)' }}>See</strong> (screenshot),{" "}
+            <strong style={{ color: 'var(--text-primary)' }}>Decide</strong> (model inference),{" "}
+            <strong style={{ color: 'var(--text-primary)' }}>Act</strong> (click/type/execute),{" "}
+            <strong style={{ color: 'var(--text-primary)' }}>Repeat</strong>. The SDK handles this loop automatically with{" "}
+            <code style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)', background: 'var(--bg-surface)', padding: '2px 6px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}>computer.prompt()</code>.
           </p>
 
-          <h2 id="create-computer" className="text-2xl font-bold tracking-tight mb-4 mt-12 pt-8 border-t border-white/[0.04]">Create computer</h2>
-          <p className="text-zinc-400 text-[15px] leading-relaxed mb-2">
-            <code className="text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded text-[12px]">POST /v1/computers</code>
-          </p>
-          <CodeBlock
-            title="Request"
-            code={`{
+          <h2 id="create-computer" style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'var(--text-2xl)', marginBottom: 'var(--space-4)', marginTop: 'var(--space-12)', paddingTop: 'var(--space-8)', borderTop: '1px solid var(--border)' }}>
+            Create computer
+          </h2>
+          <p style={{ marginBottom: 'var(--space-3)' }}><Endpoint method="POST" path="/v1/computers" /></p>
+          <CodeBlock title="Request" code={`{
   "os": "linux",
   "cpu": 2,
   "ram": "8gb",
-  "persistent": false,
-  "template": "default"
-}`}
-          />
-          <CodeBlock
-            title="Response (201)"
-            code={`{
+  "persistent": false
+}`} />
+          <CodeBlock title="Response (201)" code={`{
   "id": "cmp_a1b2c3d4",
   "os": "linux",
   "cpu": 2,
   "ram": "8gb",
   "status": "running",
   "created_at": "2026-05-17T12:00:00Z",
-  "display": {
-    "width": 1280,
-    "height": 720
-  }
-}`}
-          />
+  "display": { "width": 1280, "height": 720 }
+}`} />
 
-          <h2 id="take-screenshot" className="text-2xl font-bold tracking-tight mb-4 mt-12 pt-8 border-t border-white/[0.04]">Take screenshot</h2>
-          <p className="text-zinc-400 text-[15px] leading-relaxed mb-2">
-            <code className="text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded text-[12px]">GET /v1/computers/:id/screenshot</code>
-          </p>
-          <p className="text-zinc-400 text-[15px] leading-relaxed mb-4">
-            Returns a PNG image of the current desktop. Use this to feed visual context to your AI model.
+          <h2 id="take-screenshot" style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'var(--text-2xl)', marginBottom: 'var(--space-4)', marginTop: 'var(--space-12)', paddingTop: 'var(--space-8)', borderTop: '1px solid var(--border)' }}>
+            Take screenshot
+          </h2>
+          <p style={{ marginBottom: 'var(--space-3)' }}><Endpoint method="GET" path="/v1/computers/:id/screenshot" /></p>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-base)', lineHeight: 1.7 }}>
+            Returns a PNG image of the current desktop.
           </p>
 
-          <h2 id="perform-action" className="text-2xl font-bold tracking-tight mb-4 mt-12 pt-8 border-t border-white/[0.04]">Perform action</h2>
-          <p className="text-zinc-400 text-[15px] leading-relaxed mb-2">
-            <code className="text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded text-[12px]">POST /v1/computers/:id/actions</code>
-          </p>
-          <CodeBlock
-            title="Click"
-            code={`{ "type": "click", "x": 500, "y": 300, "button": "left" }`}
-          />
-          <CodeBlock
-            title="Type"
-            code={`{ "type": "type", "text": "Hello from Vessel" }`}
-          />
-          <CodeBlock
-            title="Key press"
-            code={`{ "type": "key", "key": "Enter" }`}
-          />
-          <CodeBlock
-            title="Scroll"
-            code={`{ "type": "scroll", "x": 500, "y": 300, "direction": "down", "amount": 3 }`}
-          />
+          <h2 id="perform-action" style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'var(--text-2xl)', marginBottom: 'var(--space-4)', marginTop: 'var(--space-12)', paddingTop: 'var(--space-8)', borderTop: '1px solid var(--border)' }}>
+            Perform action
+          </h2>
+          <p style={{ marginBottom: 'var(--space-3)' }}><Endpoint method="POST" path="/v1/computers/:id/actions" /></p>
+          <CodeBlock title="Click" code={`{ "type": "click", "x": 500, "y": 300, "button": "left" }`} />
+          <CodeBlock title="Type" code={`{ "type": "type", "text": "Hello from Vessel" }`} />
+          <CodeBlock title="Key press" code={`{ "type": "key", "key": "Enter" }`} />
 
-          <h2 id="execute-bash" className="text-2xl font-bold tracking-tight mb-4 mt-12 pt-8 border-t border-white/[0.04]">Execute bash</h2>
-          <p className="text-zinc-400 text-[15px] leading-relaxed mb-2">
-            <code className="text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded text-[12px]">POST /v1/computers/:id/bash</code>
-          </p>
-          <CodeBlock
-            title="Request"
-            code={`{ "command": "ls -la /home" }`}
-          />
-          <CodeBlock
-            title="Response"
-            code={`{
+          <h2 id="execute-bash" style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'var(--text-2xl)', marginBottom: 'var(--space-4)', marginTop: 'var(--space-12)', paddingTop: 'var(--space-8)', borderTop: '1px solid var(--border)' }}>
+            Execute bash
+          </h2>
+          <p style={{ marginBottom: 'var(--space-3)' }}><Endpoint method="POST" path="/v1/computers/:id/bash" /></p>
+          <CodeBlock title="Request" code={`{ "command": "ls -la /home" }`} />
+          <CodeBlock title="Response" code={`{
   "stdout": "total 4\\ndrwxr-xr-x 2 user user 4096 May 17 12:00 user\\n",
   "stderr": "",
   "exit_code": 0
-}`}
-          />
+}`} />
 
-          <h2 id="python-sdk" className="text-2xl font-bold tracking-tight mb-4 mt-12 pt-8 border-t border-white/[0.04]">Python SDK</h2>
-          <CodeBlock
-            title="Install"
-            code={`pip install vessel-sdk`}
-          />
-          <CodeBlock
-            title="Usage"
-            code={`import vessel
+          <h2 id="python-sdk" style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'var(--text-2xl)', marginBottom: 'var(--space-4)', marginTop: 'var(--space-12)', paddingTop: 'var(--space-8)', borderTop: '1px solid var(--border)' }}>
+            Python SDK
+          </h2>
+          <CodeBlock title="Install" code={`pip install vessel-sdk`} />
+          <CodeBlock title="Usage" code={`import vessel
 
 client = vessel.Client(api_key="vsl_your_api_key")
-
-# Create and use a computer
 computer = client.computers.create(os="linux", cpu=2, ram="8gb")
 
 # Autonomous agent mode
@@ -290,41 +262,29 @@ computer.click(500, 300)
 computer.type("Hello")
 output = computer.bash("cat /tmp/data.csv")
 
-# Cleanup
-computer.terminate()`}
-          />
+computer.terminate()`} />
 
-          <h2 id="typescript-sdk" className="text-2xl font-bold tracking-tight mb-4 mt-12 pt-8 border-t border-white/[0.04]">TypeScript SDK</h2>
-          <CodeBlock
-            title="Install"
-            code={`npm install @vessel/sdk`}
-          />
-          <CodeBlock
-            title="Usage"
-            code={`import { Vessel } from "@vessel/sdk";
+          <h2 id="typescript-sdk" style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'var(--text-2xl)', marginBottom: 'var(--space-4)', marginTop: 'var(--space-12)', paddingTop: 'var(--space-8)', borderTop: '1px solid var(--border)' }}>
+            TypeScript SDK
+          </h2>
+          <CodeBlock title="Install" code={`npm install @vessel/sdk`} />
+          <CodeBlock title="Usage" code={`import { Vessel } from "@vessel/sdk";
 
 const client = new Vessel({ apiKey: "vsl_your_api_key" });
-
 const computer = await client.computers.create({
-  os: "linux",
-  cpu: 2,
-  ram: "8gb",
+  os: "linux", cpu: 2, ram: "8gb",
 });
 
-// Autonomous agent mode
 const result = await computer.prompt({
   model: "claude-sonnet-4-6",
-  task: "Open Firefox and take a screenshot of the homepage",
+  task: "Open Firefox and screenshot the homepage",
 });
 
-// Manual control
-const screenshot = await computer.screenshot(); // Buffer
 await computer.click(500, 300);
 await computer.type("Hello from Vessel");
 const output = await computer.bash("ls -la");
 
-await computer.terminate();`}
-          />
+await computer.terminate();`} />
         </main>
       </div>
     </div>
