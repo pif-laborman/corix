@@ -46,6 +46,9 @@ RUN curl -fsSL https://dl.google.com/linux/direct/google-chrome-stable_current_a
 # Install pre-built WhiteSur GTK theme (macOS Dark)
 COPY docker/themes/gtk/WhiteSur-Dark /usr/share/themes/WhiteSur-Dark
 
+# Install pre-built WhiteSur icons (macOS-style)
+COPY docker/themes/icons/WhiteSur-dark /usr/share/icons/WhiteSur-dark
+
 # Install pre-built WhiteSur cursors
 COPY docker/themes/cursors/WhiteSur-cursors /usr/share/icons/WhiteSur-cursors
 
