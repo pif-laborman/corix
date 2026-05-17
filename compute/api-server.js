@@ -508,6 +508,55 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
+  // POST /v1/computers/:id/resize
+  const resizeMatch = url.pathname.match(/^\/v1\/computers\/([^/]+)\/resize$/);
+  if (req.method === "POST" && resizeMatch) {
+    const computerId = resizeMatch[1];
+    const containerId = await getContainerId(computerId, userId);
+    if (!containerId) return sendJson(res, 404, { error: "Computer not found" });
+
+    const body = await parseBody(req);
+    if (!body.cpu && !body.ram) return sendJson(res, 400, { error: "Provide cpu and/or ram to resize" });
+
+    try {
+      await orchRequest("POST", `/containers/${containerId}/resize`, { cpu: body.cpu, ram: body.ram });
+      const patch = { updated_at: new Date().toISOString() };
+      if (body.cpu) patch.cpu = body.cpu;
+      if (body.ram) patch.ram = body.ram;
+      await fetch(`${SUPABASE_URL}/rest/v1/computers?id=eq.${computerId}&user_id=eq.${userId}`, {
+        method: "PATCH",
+        headers: { apikey: SUPABASE_SERVICE_KEY, Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify(patch),
+      });
+      return sendJson(res, 200, { ok: true });
+    } catch (err) {
+      return sendJson(res, 502, { error: err.message });
+    }
+  }
+
+  // POST /v1/computers/:id/move
+  const moveMatch = url.pathname.match(/^\/v1\/computers\/([^/]+)\/move$/);
+  if (req.method === "POST" && moveMatch) {
+    const computerId = moveMatch[1];
+    const body = await parseBody(req);
+    if (!body.workspace_id) return sendJson(res, 400, { error: "Missing workspace_id" });
+
+    // Verify target workspace belongs to user
+    const wsRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/workspaces?id=eq.${body.workspace_id}&user_id=eq.${userId}&status=eq.active`,
+      { headers: { apikey: SUPABASE_SERVICE_KEY, Authorization: `Bearer ${SUPABASE_SERVICE_KEY}` } }
+    );
+    const wsData = await wsRes.json();
+    if (!Array.isArray(wsData) || wsData.length === 0) return sendJson(res, 404, { error: "Target workspace not found" });
+
+    await fetch(`${SUPABASE_URL}/rest/v1/computers?id=eq.${computerId}&user_id=eq.${userId}`, {
+      method: "PATCH",
+      headers: { apikey: SUPABASE_SERVICE_KEY, Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ workspace_id: body.workspace_id, updated_at: new Date().toISOString() }),
+    });
+    return sendJson(res, 200, { ok: true });
+  }
+
   // DELETE /v1/computers/:id
   const deleteMatch = url.pathname.match(/^\/v1\/computers\/([^/]+)$/);
   if (req.method === "DELETE" && deleteMatch) {

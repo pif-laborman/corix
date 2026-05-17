@@ -33,6 +33,8 @@ const sections = [
       { label: "List computers", href: "#list-computers" },
       { label: "Delete computer", href: "#delete-computer" },
       { label: "Clone computer", href: "#clone-computer" },
+      { label: "Resize computer", href: "#resize-computer" },
+      { label: "Move computer", href: "#move-computer" },
     ],
   },
   {
@@ -54,6 +56,12 @@ const sections = [
       { label: "Scroll", href: "#action-scroll" },
       { label: "Execute bash", href: "#execute-bash" },
       { label: "Execute Python", href: "#execute-python" },
+    ],
+  },
+  {
+    title: "Streaming",
+    items: [
+      { label: "WebSocket terminal", href: "#ws-terminal" },
     ],
   },
   {
@@ -247,6 +255,16 @@ curl https://meetpif.com/vessel-api/v1/computers/{id}/screenshot \\
           <P>Creates a new computer with the same specs. Does not copy filesystem state.</P>
           <CodeBlock title="Request" code={`{ "name": "my-agent-copy" }  // optional, defaults to "{name} (copy)"`} />
 
+          <SectionTitle id="resize-computer">Resize computer</SectionTitle>
+          <p style={{ marginBottom: "var(--space-3)" }}><Endpoint method="POST" path="/v1/computers/:id/resize" /></p>
+          <P>Live-resize CPU and/or RAM without restarting the computer.</P>
+          <CodeBlock title="Request" code={`{ "cpu": 2, "ram": 8 }  // provide one or both`} />
+
+          <SectionTitle id="move-computer">Move computer</SectionTitle>
+          <p style={{ marginBottom: "var(--space-3)" }}><Endpoint method="POST" path="/v1/computers/:id/move" /></p>
+          <P>Move a computer to a different workspace.</P>
+          <CodeBlock title="Request" code={`{ "workspace_id": "target-workspace-uuid" }`} />
+
           {/* Lifecycle */}
           <SectionTitle id="start-computer">Start computer</SectionTitle>
           <p style={{ marginBottom: "var(--space-3)" }}><Endpoint method="POST" path="/v1/computers/:id/start" /></p>
@@ -305,6 +323,29 @@ curl https://meetpif.com/vessel-api/v1/computers/{id}/screenshot \\
   "stderr": "",
   "exit_code": 0
 }`} />
+
+          {/* Streaming */}
+          <SectionTitle id="ws-terminal">WebSocket terminal</SectionTitle>
+          <P>Connect to a real-time interactive shell session via WebSocket. The connection stays open for bidirectional I/O.</P>
+          <CodeBlock title="Endpoint" code={`wss://meetpif.com/vessel-ws/terminal/:computerId?token=vsl_your_api_key`} />
+          <P>Send JSON messages to write to stdin:</P>
+          <CodeBlock title="Client to server" code={`{ "type": "stdin", "data": "ls -la\\n" }`} />
+          <P>Receive JSON messages with stdout, stderr, and exit events:</P>
+          <CodeBlock title="Server to client" code={`{ "type": "stdout", "data": "total 4\\ndrwxr-xr-x 2 root root 4096 ..." }
+{ "type": "stderr", "data": "command not found" }
+{ "type": "exit", "code": 0 }`} />
+          <CodeBlock title="JavaScript example" code={`const ws = new WebSocket(
+  "wss://meetpif.com/vessel-ws/terminal/" + computerId + "?token=" + apiKey
+);
+
+ws.onmessage = (event) => {
+  const msg = JSON.parse(event.data);
+  if (msg.type === "stdout") process.stdout.write(msg.data);
+  if (msg.type === "stderr") process.stderr.write(msg.data);
+};
+
+// Send a command
+ws.send(JSON.stringify({ type: "stdin", data: "echo hello\\n" }));`} />
 
           {/* Errors */}
           <SectionTitle id="error-codes">Error codes</SectionTitle>

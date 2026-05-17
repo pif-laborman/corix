@@ -127,6 +127,15 @@ function startContainer(containerId) {
   execSync(`docker start ${containerId}`, { timeout: 15000 });
 }
 
+function resizeContainer(containerId, cpu, ram) {
+  const args = [];
+  if (cpu) args.push(`--cpus=${Math.min(cpu, 2)}`);
+  if (ram) args.push(`--memory=${Math.min(ram, 4)}g`, `--memory-swap=${Math.min(ram, 4)}g`);
+  if (args.length > 0) {
+    execSync(`docker update ${args.join(" ")} ${containerId}`, { timeout: 10000 });
+  }
+}
+
 function proxyToAgent(port, method, path, body) {
   return new Promise((resolve, reject) => {
     const opts = {
@@ -235,6 +244,21 @@ const server = http.createServer(async (req, res) => {
     if (!containers.has(id)) return sendJson(res, 404, { error: "Container not found" });
     try { startContainer(id); return sendJson(res, 200, { ok: true }); }
     catch (err) { return sendJson(res, 500, { error: err.message }); }
+  }
+
+  // Resize container
+  const resizeMatch = url.pathname.match(/^\/containers\/([a-f0-9]+)\/resize$/);
+  if (req.method === "POST" && resizeMatch) {
+    const id = resizeMatch[1];
+    if (!containers.has(id)) return sendJson(res, 404, { error: "Container not found" });
+    const body = await parseBody(req);
+    try {
+      resizeContainer(id, body.cpu, body.ram);
+      const info = containers.get(id);
+      if (body.cpu) info.cpu = body.cpu;
+      if (body.ram) info.ram = `${body.ram}g`;
+      return sendJson(res, 200, { ok: true });
+    } catch (err) { return sendJson(res, 500, { error: err.message }); }
   }
 
   // Proxy to agent: /containers/:id/screenshot, /actions, /bash, /python, /health
