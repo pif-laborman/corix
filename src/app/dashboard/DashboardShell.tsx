@@ -110,20 +110,32 @@ function SidebarThumbnail({ computer, selected, onClick }: {
   );
 }
 
+interface Workspace {
+  id: string;
+  name: string;
+  status: string;
+  created_at: string;
+}
+
 export function DashboardShell({
   user,
   profile,
+  initialWorkspaces,
   initialComputers,
   initialApiKeys,
 }: {
   user: User;
   profile: Profile | null;
-  initialWorkspaces: unknown[];
+  initialWorkspaces: Workspace[];
   initialComputers: Computer[];
   initialApiKeys: ApiKey[];
 }) {
   const [view, setView] = useState<View>(initialComputers.length > 0 ? "computer" : "home");
   const [computers, setComputers] = useState(initialComputers);
+  const [workspaces, setWorkspaces] = useState<Workspace[]>(initialWorkspaces);
+  const [activeWorkspaceId, setActiveWorkspaceId] = useState<string | null>(
+    initialWorkspaces.length > 0 ? initialWorkspaces[0].id : null
+  );
   const [selectedComputerId, setSelectedComputerId] = useState<string | null>(
     initialComputers.length > 0 ? initialComputers[0].id : null
   );
@@ -133,6 +145,39 @@ export function DashboardShell({
   const displayName = profile?.display_name || user.email?.split("@")[0] || "User";
   const initials = displayName.charAt(0).toUpperCase();
   const plan = profile?.plan || "starter";
+  const activeWorkspace = workspaces.find((w) => w.id === activeWorkspaceId) || null;
+
+  const handleCreateWorkspace = useCallback(async (name: string) => {
+    try {
+      const res = await fetch("/api/workspaces", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name }),
+      });
+      const data = await res.json();
+      if (data.id) {
+        setWorkspaces((prev) => [...prev, data]);
+        setActiveWorkspaceId(data.id);
+        setComputers([]);
+        setSelectedComputerId(null);
+        setView("home");
+      }
+    } catch {}
+  }, []);
+
+  const handleSwitchWorkspace = useCallback((id: string) => {
+    setActiveWorkspaceId(id);
+    setSelectedComputerId(null);
+    setView("home");
+    // Reload computers for this workspace
+    fetch("/api/computers")
+      .then((r) => r.json())
+      .then((data) => {
+        const all = data.computers || [];
+        setComputers(all.filter((c: Computer) => c.workspace_id === id));
+      })
+      .catch(() => {});
+  }, []);
 
   const selectedComputer = computers.find((c) => c.id === selectedComputerId) || null;
 
@@ -212,7 +257,12 @@ export function DashboardShell({
           initials={initials}
           email={user.email || ""}
           plan={plan}
+          workspaces={workspaces}
+          activeWorkspaceId={activeWorkspaceId}
+          activeWorkspaceName={activeWorkspace?.name || null}
           onSettings={() => setView("settings")}
+          onSwitchWorkspace={handleSwitchWorkspace}
+          onCreateWorkspace={handleCreateWorkspace}
         />
 
         {/* Home */}

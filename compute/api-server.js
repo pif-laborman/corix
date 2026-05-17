@@ -157,6 +157,36 @@ const server = http.createServer(async (req, res) => {
     return sendJson(res, 401, { error: "Invalid or missing API key" });
   }
 
+  // GET /v1/workspaces
+  if (req.method === "GET" && url.pathname === "/v1/workspaces") {
+    const supaRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/workspaces?user_id=eq.${userId}&status=eq.active&order=created_at.asc`,
+      { headers: { apikey: SUPABASE_SERVICE_KEY, Authorization: `Bearer ${SUPABASE_SERVICE_KEY}` } }
+    );
+    const workspaces = await supaRes.json();
+    return sendJson(res, 200, { workspaces });
+  }
+
+  // POST /v1/workspaces
+  if (req.method === "POST" && url.pathname === "/v1/workspaces") {
+    const body = await parseBody(req);
+    if (!body.name) return sendJson(res, 400, { error: "Missing 'name'" });
+
+    const supaRes = await fetch(`${SUPABASE_URL}/rest/v1/workspaces`, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_SERVICE_KEY,
+        Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
+        "Content-Type": "application/json",
+        Prefer: "return=representation",
+      },
+      body: JSON.stringify({ user_id: userId, name: body.name }),
+    });
+    const ws = await supaRes.json();
+    if (supaRes.status >= 400) return sendJson(res, supaRes.status, ws);
+    return sendJson(res, 201, Array.isArray(ws) ? ws[0] : ws);
+  }
+
   // POST /v1/computers
   if (req.method === "POST" && url.pathname === "/v1/computers") {
     const body = await parseBody(req);
