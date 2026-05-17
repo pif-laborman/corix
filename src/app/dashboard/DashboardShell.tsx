@@ -3,13 +3,13 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import type { User } from "@supabase/supabase-js";
-import { SignOutButton } from "./SignOutButton";
 import { ApiKeysPanel } from "./ApiKeysPanel";
 import { DesktopViewer } from "./DesktopViewer";
 import { CreateComputerPopover } from "./CreateComputerPopover";
 import { ComputerMenu } from "./ComputerMenu";
 import { ComputerSettings } from "./ComputerSettings";
 import { HomeGrid } from "./HomeGrid";
+import { WorkspaceMenu } from "./WorkspaceMenu";
 
 interface Profile {
   id: string;
@@ -206,15 +206,14 @@ export function DashboardShell({
         className="shrink-0 flex flex-col"
         style={{ width: 280, borderRight: "1px solid var(--border)", background: "var(--bg-surface)" }}
       >
-        {/* Workspace header */}
-        <div className="flex items-center gap-2 cursor-default" style={{ padding: "14px 16px", borderBottom: "1px solid var(--border)" }}>
-          <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0" style={{ background: "var(--fill-action)", color: "var(--text-on-action)", fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "var(--text-xs)" }}>
-            {initials}
-          </div>
-          <span className="truncate" style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "var(--text-sm)" }}>
-            {displayName}
-          </span>
-        </div>
+        {/* Workspace dropdown */}
+        <WorkspaceMenu
+          displayName={displayName}
+          initials={initials}
+          email={user.email || ""}
+          plan={plan}
+          onSettings={() => setView("settings")}
+        />
 
         {/* Home */}
         <div style={{ padding: "8px 8px 4px" }}>
@@ -285,33 +284,11 @@ export function DashboardShell({
           </div>
         </div>
 
-        {/* Bottom */}
-        <div style={{ padding: "8px", borderTop: "1px solid var(--border)" }}>
-          <button
-            onClick={() => setView("settings")}
-            className="w-full text-left flex items-center gap-2 transition-colors"
-            style={{
-              padding: "8px 10px",
-              borderRadius: "var(--radius-sm)",
-              fontSize: "var(--text-sm)",
-              fontFamily: "var(--font-body)",
-              fontWeight: view === "settings" ? 500 : 400,
-              color: view === "settings" ? "var(--text-primary)" : "var(--text-secondary)",
-              background: view === "settings" ? "var(--bg-page)" : "transparent",
-            }}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-              <path d="M12.22 2h-.44a2 2 0 00-2 2v.18a2 2 0 01-1 1.73l-.43.25a2 2 0 01-2 0l-.15-.08a2 2 0 00-2.73.73l-.22.38a2 2 0 00.73 2.73l.15.1a2 2 0 011 1.72v.51a2 2 0 01-1 1.74l-.15.09a2 2 0 00-.73 2.73l.22.38a2 2 0 002.73.73l.15-.08a2 2 0 012 0l.43.25a2 2 0 011 1.73V20a2 2 0 002 2h.44a2 2 0 002-2v-.18a2 2 0 011-1.73l.43-.25a2 2 0 012 0l.15.08a2 2 0 002.73-.73l.22-.39a2 2 0 00-.73-2.73l-.15-.08a2 2 0 01-1-1.74v-.5a2 2 0 011-1.74l.15-.09a2 2 0 00.73-2.73l-.22-.38a2 2 0 00-2.73-.73l-.15.08a2 2 0 01-2 0l-.43-.25a2 2 0 01-1-1.73V4a2 2 0 00-2-2z" />
-              <circle cx="12" cy="12" r="3" />
-            </svg>
-            Settings
-          </button>
-          <div className="flex items-center justify-between" style={{ padding: "8px 10px" }}>
-            <span style={{ fontSize: "var(--text-xs)", color: "var(--text-on-action)", background: "var(--fill-action)", padding: "1px 8px", borderRadius: "var(--radius-full)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
-              {plan}
-            </span>
-            <SignOutButton />
-          </div>
+        {/* Plan badge */}
+        <div className="flex items-center justify-center" style={{ padding: "12px 16px", borderTop: "1px solid var(--border)" }}>
+          <span style={{ fontSize: "var(--text-xs)", color: "var(--text-on-action)", background: "var(--fill-action)", padding: "2px 10px", borderRadius: "var(--radius-full)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            {plan}
+          </span>
         </div>
       </aside>
 
