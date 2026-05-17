@@ -114,6 +114,7 @@ interface Workspace {
   id: string;
   name: string;
   status: string;
+  icon_url: string | null;
   created_at: string;
 }
 
@@ -432,6 +433,11 @@ export function DashboardShell({
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ name }),
             }).catch(() => {});
+          }}
+          workspaceIconUrl={activeWorkspace?.icon_url || null}
+          onIconUploaded={(url) => {
+            if (!activeWorkspaceId) return;
+            setWorkspaces((prev) => prev.map((w) => w.id === activeWorkspaceId ? { ...w, icon_url: url } : w));
           }}
         />
       )}

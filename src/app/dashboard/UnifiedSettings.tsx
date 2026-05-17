@@ -43,6 +43,8 @@ interface Props {
   onRenameComputer: (id: string, name: string) => void;
   onDeleteWorkspace: () => void;
   onRenameWorkspace: (name: string) => void;
+  workspaceIconUrl?: string | null;
+  onIconUploaded?: (url: string) => void;
 }
 
 function CopyButton({ value }: { value: string }) {
@@ -79,18 +81,46 @@ function ReadonlyField({ label, value }: { label: string; value: string }) {
 }
 
 // Workspace settings panel
-function WorkspacePanel({ workspaceName, workspaceId, apiKeys, onDeleteWorkspace, onRenameWorkspace }: {
+function WorkspacePanel({ workspaceName, workspaceId, workspaceIconUrl, apiKeys, onDeleteWorkspace, onRenameWorkspace, onIconUploaded }: {
   workspaceName: string;
   workspaceId: string | null;
+  workspaceIconUrl: string | null;
   apiKeys: ApiKey[];
   onDeleteWorkspace: () => void;
   onRenameWorkspace: (name: string) => void;
+  onIconUploaded: (url: string) => void;
 }) {
   const [name, setName] = useState(workspaceName);
+  const [iconUrl, setIconUrl] = useState(workspaceIconUrl);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   function handleSave() {
     if (name.trim() && name.trim() !== workspaceName) {
       onRenameWorkspace(name.trim());
+    }
+  }
+
+  async function handleIconUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file || !workspaceId) return;
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch(`/api/workspaces/${workspaceId}/icon`, {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.icon_url) {
+        setIconUrl(data.icon_url);
+        onIconUploaded(data.icon_url);
+      }
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
   }
 
@@ -103,8 +133,10 @@ function WorkspacePanel({ workspaceName, workspaceId, apiKeys, onDeleteWorkspace
         {/* Icon */}
         <div>
           <label style={{ display: "block", fontSize: "var(--text-xs)", fontWeight: 500, color: "var(--text-secondary)", marginBottom: "var(--space-2)", fontFamily: "var(--font-display)" }}>Icon</label>
+          <input ref={fileInputRef} type="file" accept="image/*" onChange={handleIconUpload} className="hidden" style={{ display: "none" }} />
           <button
-            className="flex items-center justify-center hover:opacity-80 transition-opacity"
+            onClick={() => fileInputRef.current?.click()}
+            className="flex items-center justify-center hover:opacity-80 transition-opacity overflow-hidden"
             style={{
               width: 64,
               height: 64,
@@ -112,11 +144,18 @@ function WorkspacePanel({ workspaceName, workspaceId, apiKeys, onDeleteWorkspace
               border: "1px solid var(--border)",
               background: "var(--bg-surface)",
               cursor: "pointer",
+              position: "relative",
             }}
           >
-            <span style={{ fontSize: "var(--text-2xl)" }}>
-              {workspaceName.charAt(0).toUpperCase()}
-            </span>
+            {uploading ? (
+              <span style={{ fontSize: "var(--text-xs)", color: "var(--text-tertiary)" }}>...</span>
+            ) : iconUrl ? (
+              <img src={iconUrl} alt="" className="w-full h-full object-cover" />
+            ) : (
+              <span style={{ fontSize: "var(--text-2xl)" }}>
+                {workspaceName.charAt(0).toUpperCase()}
+              </span>
+            )}
           </button>
         </div>
         {/* Name */}
@@ -228,7 +267,7 @@ function ComputerPanel({ computer, onDelete, onRename }: { computer: Computer; o
   );
 }
 
-export function UnifiedSettings({ workspaceName, workspaceId, displayName, email, plan, initials, computers, apiKeys, initialTab, onClose, onDeleteComputer, onRenameComputer, onDeleteWorkspace, onRenameWorkspace }: Props) {
+export function UnifiedSettings({ workspaceName, workspaceId, displayName, email, plan, initials, computers, apiKeys, initialTab, onClose, onDeleteComputer, onRenameComputer, onDeleteWorkspace, onRenameWorkspace, workspaceIconUrl, onIconUploaded }: Props) {
   const [activeTab, setActiveTab] = useState(initialTab || "workspace");
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -322,7 +361,7 @@ export function UnifiedSettings({ workspaceName, workspaceId, displayName, email
           {/* Scrollable content */}
           <div className="flex-1 overflow-y-auto" style={{ padding: "4px 24px 24px" }}>
             {activeTab === "workspace" && (
-              <WorkspacePanel workspaceName={workspaceName} workspaceId={workspaceId} apiKeys={apiKeys} onDeleteWorkspace={onDeleteWorkspace} onRenameWorkspace={onRenameWorkspace} />
+              <WorkspacePanel workspaceName={workspaceName} workspaceId={workspaceId} workspaceIconUrl={workspaceIconUrl || null} apiKeys={apiKeys} onDeleteWorkspace={onDeleteWorkspace} onRenameWorkspace={onRenameWorkspace} onIconUploaded={onIconUploaded || (() => {})} />
             )}
             {activeTab === "members" && <MembersPanel />}
             {activeTab === "profile" && (
