@@ -58,13 +58,13 @@ export default function PricingPage() {
     <div className="min-h-screen" style={{ background: 'var(--bg-page)', color: 'var(--text-primary)' }}>
       <nav className="fixed top-0 left-0 right-0 z-50" style={{ borderBottom: '1px solid var(--border)', background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(16px)' }}>
         <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2" style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'var(--text-sm)' }}>
+          <Link href="/" className="flex items-center gap-2">
             <svg width="22" height="22" viewBox="0 0 100 100" aria-label="Corix">
               <rect x="38.5" y="10" width="23" height="23" rx="4" fill="currentColor" />
               <rect x="10" y="38.5" width="23" height="23" rx="4" fill="currentColor" />
               <rect x="38.5" y="67" width="23" height="23" rx="4" fill="currentColor" />
             </svg>
-            Corix
+            <span style={{ fontFamily: 'var(--font-geist)', fontWeight: 600, fontSize: 'var(--text-sm)', letterSpacing: '-0.03em' }}>corix</span>
           </Link>
           <div className="hidden sm:flex items-center gap-6">
             <Link href="/docs" className="hover:opacity-70 transition-opacity" style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>Docs</Link>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans, Inter } from "next/font/google";
+import { DM_Sans, Inter, Geist } from "next/font/google";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -12,6 +12,12 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   weight: ["300", "400", "500"],
+});
+
+const geist = Geist({
+  variable: "--font-geist",
+  subsets: ["latin"],
+  weight: ["600"],
 });
 
 export const metadata: Metadata = {
@@ -32,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${inter.variable} h-full antialiased`}>
+    <html lang="en" className={`${dmSans.variable} ${inter.variable} ${geist.variable} h-full antialiased`}>
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Fragment+Mono&display=swap"

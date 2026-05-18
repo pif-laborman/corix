@@ -53,13 +53,13 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center px-6" style={{ background: 'var(--bg-page)' }}>
       <div className="w-full max-w-sm">
         <div className="text-center" style={{ marginBottom: 'var(--space-8)' }}>
-          <Link href="/" className="inline-flex items-center gap-2" style={{ marginBottom: 'var(--space-6)', fontFamily: 'var(--font-display)', fontWeight: 500 }}>
+          <Link href="/" className="inline-flex items-center gap-2" style={{ marginBottom: 'var(--space-6)' }}>
             <svg width="24" height="24" viewBox="0 0 100 100" aria-label="Corix">
               <rect x="38.5" y="10" width="23" height="23" rx="4" fill="currentColor" />
               <rect x="10" y="38.5" width="23" height="23" rx="4" fill="currentColor" />
               <rect x="38.5" y="67" width="23" height="23" rx="4" fill="currentColor" />
             </svg>
-            <span style={{ fontSize: 'var(--text-lg)' }}>Corix</span>
+            <span style={{ fontFamily: 'var(--font-geist)', fontWeight: 600, fontSize: 'var(--text-lg)', letterSpacing: '-0.03em' }}>corix</span>
           </Link>
           <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'var(--text-xl)', marginBottom: 'var(--space-1)' }}>Welcome back</h1>
           <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)' }}>Sign in to your account to continue</p>
