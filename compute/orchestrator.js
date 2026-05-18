@@ -12,7 +12,7 @@ const MAX_CONTAINERS = 2;
 const DEFAULT_CPU = 1;
 const DEFAULT_RAM = "2g";
 const LABEL = "corix-computer";
-const AUTH_TOKEN = process.env.CORIX_ORCHESTRATOR_TOKEN || "vsl-orch-secret";
+const AUTH_TOKEN = process.env.CORIX_ORCHESTRATOR_TOKEN || "crx-orch-secret";
 
 // Track containers: { containerId: { port, name, cpu, ram, createdAt } }
 const containers = new Map();

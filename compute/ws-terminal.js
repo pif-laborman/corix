@@ -6,7 +6,7 @@ const crypto = require("crypto");
 const PORT = 8423;
 const SUPABASE_URL = process.env.CORIX_SUPABASE_URL || "";
 const SUPABASE_SERVICE_KEY = process.env.CORIX_SUPABASE_SERVICE_KEY || "";
-const INTERNAL_TOKEN = process.env.CORIX_INTERNAL_TOKEN || "vsl-internal-mvp-2026";
+const INTERNAL_TOKEN = process.env.CORIX_INTERNAL_TOKEN || "crx-internal-mvp-2026";
 
 // Verify API key or internal token, return userId
 async function verifyAuth(token) {

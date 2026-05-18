@@ -3,7 +3,7 @@ const crypto = require("crypto");
 
 const PORT = 8422;
 const ORCH_URL = "http://127.0.0.1:8421";
-const ORCH_TOKEN = process.env.CORIX_ORCHESTRATOR_TOKEN || "vsl-orch-mvp-2026";
+const ORCH_TOKEN = process.env.CORIX_ORCHESTRATOR_TOKEN || "crx-orch-mvp-2026";
 
 // Supabase config for auth verification
 const SUPABASE_URL = process.env.CORIX_SUPABASE_URL || "";
@@ -40,7 +40,7 @@ function sendBinary(res, status, contentType, data) {
   res.end(data);
 }
 
-const INTERNAL_TOKEN = process.env.CORIX_INTERNAL_TOKEN || "vsl-internal-mvp-2026";
+const INTERNAL_TOKEN = process.env.CORIX_INTERNAL_TOKEN || "crx-internal-mvp-2026";
 
 // Verify auth: either vsl_ API key or internal server token
 async function verifyAuth(req) {
