@@ -27,6 +27,7 @@ interface Computer {
   cpu: number;
   ram: number;
   status: string;
+  hostname: string | null;
   created_at: string;
 }
 
@@ -406,6 +407,7 @@ export function DashboardShell({
               <DesktopViewer
                 computerId={selectedComputer.id}
                 computerName={selectedComputer.name}
+                hostname={selectedComputer.hostname}
                 onClose={goHome}
                 inline
               />

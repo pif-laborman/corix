@@ -5,24 +5,25 @@ import { useState, useEffect, useRef } from "react";
 interface Props {
   computerId: string;
   computerName: string;
+  hostname: string | null;
   onClose: () => void;
   inline?: boolean;
 }
 
-// noVNC port = agent port (10000-10100) + 100
-// The VPS API returns the hostname with agent port; we derive the VNC port
-function getVncUrl(computerId: string): string {
-  // For now, hardcode the VPS host. The noVNC client is served by the container itself.
-  // We access it through nginx at /vessel-vnc/{port}/vnc.html
-  return `https://meetpif.com/vessel-vnc/10100/vnc_lite.html?autoconnect=true&resize=scale&reconnect=true`;
+const VNC_PORT_OFFSET = 100;
+
+function getVncUrl(hostname: string | null): string {
+  const agentPort = hostname ? parseInt(hostname.split(":")[1] || "10000", 10) : 10000;
+  const vncPort = agentPort + VNC_PORT_OFFSET;
+  return `https://meetpif.com/vessel-vnc/${vncPort}/vnc_lite.html?autoconnect=true&resize=scale&reconnect=true`;
 }
 
-export function DesktopViewer({ computerId, computerName, onClose, inline }: Props) {
+export function DesktopViewer({ computerId, computerName, hostname, onClose, inline }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  const vncUrl = getVncUrl(computerId);
+  const vncUrl = getVncUrl(hostname);
 
   useEffect(() => {
     // Timeout for loading
