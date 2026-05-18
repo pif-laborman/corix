@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase-server";
 import { NextResponse } from "next/server";
 
-const VPS_API = process.env.CORIX_VPS_API_URL || "https://meetpif.com/corix-api";
+const VPS_API = process.env.CORIX_VPS_API_URL || "https://compute.corix.dev";
 const INTERNAL_TOKEN = process.env.CORIX_INTERNAL_TOKEN || "";
 
 async function vpsFetch(path: string, method: string, userId: string, body?: Record<string, unknown>) {

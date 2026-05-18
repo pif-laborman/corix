@@ -424,7 +424,7 @@ curl https://corix.dev/api/v1/computers/{id}/screenshot \\
           {/* Streaming */}
           <SectionTitle id="ws-terminal">WebSocket terminal</SectionTitle>
           <P>Connect to a real-time interactive shell session via WebSocket. The connection stays open for bidirectional I/O.</P>
-          <CodeBlock title="Endpoint" code={`wss://meetpif.com/corix-ws/terminal/:computerId?token=vsl_your_api_key`} />
+          <CodeBlock title="Endpoint" code={`wss://compute.corix.dev/ws/terminal/:computerId?token=vsl_your_api_key`} />
           <P>Send JSON messages to write to stdin:</P>
           <CodeBlock title="Client to server" code={`{ "type": "stdin", "data": "ls -la\\n" }`} />
           <P>Receive JSON messages with stdout, stderr, and exit events:</P>
@@ -432,7 +432,7 @@ curl https://corix.dev/api/v1/computers/{id}/screenshot \\
 { "type": "stderr", "data": "command not found" }
 { "type": "exit", "code": 0 }`} />
           <CodeBlock title="JavaScript example" code={`const ws = new WebSocket(
-  "wss://meetpif.com/corix-ws/terminal/" + computerId + "?token=" + apiKey
+  "wss://compute.corix.dev/ws/terminal/" + computerId + "?token=" + apiKey
 );
 
 ws.onmessage = (event) => {
