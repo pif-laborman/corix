@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Corix — Logo usage brief</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --ink: #0a0a0a;
+        --paper: #f5f4f0;
+        --rule: rgba(10,10,10,0.12);
+        --muted: #6b6660;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; background: var(--paper); color: var(--ink); font-family: 'Geist', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+      .page { max-width: 1180px; margin: 0 auto; padding: 80px 56px 120px; }
+      .mono { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+      h1, h2, h3, h4 { font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+      p { margin: 0; line-height: 1.55; }
+
+      .topbar { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 24px; margin-bottom: 48px; border-bottom: 1px solid var(--rule); }
+      .topbar .doc-id { display: flex; gap: 24px; }
+
+      .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: end; padding: 24px 0 80px; }
+      .hero-mark { display: flex; align-items: center; justify-content: center; aspect-ratio: 1 / 1; max-width: 460px; }
+      .hero h1 { font-size: 64px; line-height: 1.02; letter-spacing: -0.04em; margin-bottom: 24px; }
+      .hero-lede { font-size: 17px; line-height: 1.5; color: #2a2724; max-width: 460px; }
+
+      .section { padding: 64px 0; border-top: 1px solid var(--rule); }
+      .section-head { display: grid; grid-template-columns: 200px 1fr; gap: 48px; margin-bottom: 48px; align-items: baseline; }
+      .section-head h2 { font-size: 32px; letter-spacing: -0.025em; }
+      .section-head .num { font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--muted); letter-spacing: 0.08em; }
+      .section-head .desc { font-size: 15px; line-height: 1.55; color: #2a2724; max-width: 520px; }
+
+      .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+      .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+      .tile { border: 1px solid var(--rule); border-radius: 4px; background: var(--paper); display: flex; flex-direction: column; }
+      .tile-body { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px; min-height: 220px; }
+      .tile-body.dark { background: var(--ink); }
+      .tile-body.compact { min-height: 160px; padding: 28px; }
+      .tile-caption { display: flex; justify-content: space-between; padding: 14px 16px; border-top: 1px solid var(--rule); font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+
+      .lockup-row { display: flex; align-items: center; gap: 18px; }
+      .wordmark { font-family: 'Geist', sans-serif; font-weight: 600; letter-spacing: -0.03em; line-height: 1; color: var(--ink); }
+      .wordmark.light { color: var(--paper); }
+
+      .clear-space { display: grid; grid-template-columns: 1fr 280px; gap: 48px; align-items: center; }
+      .cs-frame { position: relative; padding: 80px; border: 1px dashed rgba(10,10,10,0.25); display: flex; align-items: center; justify-content: center; }
+      .cs-frame svg.bg-grid { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+      .cs-frame .mark-wrap { position: relative; z-index: 2; }
+      .cs-list { display: flex; flex-direction: column; gap: 16px; }
+      .cs-list .kv { display: flex; flex-direction: column; gap: 4px; }
+      .cs-list .kv .k { font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+      .cs-list .kv .v { font-size: 15px; }
+
+      .scale-strip { display: flex; align-items: center; gap: 64px; padding: 32px; border: 1px solid var(--rule); border-radius: 4px; flex-wrap: wrap; }
+      .scale-cell { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+      .scale-cell .label { font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.06em; color: var(--muted); }
+
+      .judgement { display: flex; flex-direction: column; }
+      .judgement .tag { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 999px; font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; width: fit-content; margin-bottom: 12px; }
+      .judgement.do .tag { background: rgba(10,10,10,0.08); color: var(--ink); }
+      .judgement.dont .tag { background: var(--ink); color: var(--paper); }
+      .judgement .note { font-size: 13px; line-height: 1.5; color: #2a2724; margin-top: 12px; }
+
+      footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: baseline; }
+
+      /* Optical balance: the mark's visual mass sits left of its geometric center
+         because the mid-row cell anchors the left side. Inside symmetric containers
+         (circles, squares) nudge the SVG ~12% rightward so it reads as centered. */
+      .optical-shift { transform: translateX(12%); }
+
+      @media print {
+        body { background: white; }
+        .page { padding: 24px 32px; max-width: none; }
+        .section { page-break-inside: avoid; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page" data-screen-label="Corix Logo Brief">
+
+      <header class="topbar">
+        <div class="doc-id">
+          <span class="mono">Corix</span>
+          <span class="mono">Logo usage brief</span>
+        </div>
+        <div class="doc-id">
+          <span class="mono">v1.0</span>
+          <span class="mono">May 2026</span>
+        </div>
+      </header>
+
+      <section class="hero">
+        <div class="hero-mark">
+          <svg viewBox="0 0 100 100" width="100%" height="100%" aria-label="Corix mark">
+            <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+            <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+            <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+          </svg>
+        </div>
+        <div>
+          <span class="mono" style="display:block; margin-bottom: 24px;">The Minimal C</span>
+          <h1>A C drawn with three squares, and the negative space between them.</h1>
+          <p class="hero-lede">The Corix mark is built on a 3×3 grid. Three cells are filled — top-center, mid-left, bottom-center. The eye completes the C from what isn't there. This brief covers how to use it.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <span class="num">01 / Construction</span>
+          <div>
+            <h2>The mark</h2>
+            <p class="desc">Three rounded squares on a 3×3 grid. Each cell occupies 23% of the icon width; gaps are 5.5%. Corner radius is 17% of the cell size. The grid is never drawn — only implied.</p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="tile">
+            <div class="tile-body">
+              <svg viewBox="0 0 100 100" width="320" height="320">
+                <g stroke="rgba(10,10,10,0.18)" stroke-width="0.3" stroke-dasharray="1.5 1">
+                  <line x1="10" y1="0" x2="10" y2="100"></line>
+                  <line x1="33" y1="0" x2="33" y2="100"></line>
+                  <line x1="38.5" y1="0" x2="38.5" y2="100"></line>
+                  <line x1="61.5" y1="0" x2="61.5" y2="100"></line>
+                  <line x1="67" y1="0" x2="67" y2="100"></line>
+                  <line x1="90" y1="0" x2="90" y2="100"></line>
+                  <line x1="0" y1="10" x2="100" y2="10"></line>
+                  <line x1="0" y1="33" x2="100" y2="33"></line>
+                  <line x1="0" y1="38.5" x2="100" y2="38.5"></line>
+                  <line x1="0" y1="61.5" x2="100" y2="61.5"></line>
+                  <line x1="0" y1="67" x2="100" y2="67"></line>
+                  <line x1="0" y1="90" x2="100" y2="90"></line>
+                </g>
+                <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+              </svg>
+            </div>
+            <div class="tile-caption"><span>Grid construction</span><span>3 × 3 cells</span></div>
+          </div>
+          <div class="tile">
+            <div class="tile-body" style="flex-direction: column; gap: 32px;">
+              <svg viewBox="0 0 100 100" width="220" height="220">
+                <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+              </svg>
+              <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; padding: 0 32px;">
+                <div style="display: flex; justify-content: space-between;"><span class="mono">Cell size</span><span style="font-size: 13px;">23%</span></div>
+                <div style="display: flex; justify-content: space-between;"><span class="mono">Gap</span><span style="font-size: 13px;">5.5%</span></div>
+                <div style="display: flex; justify-content: space-between;"><span class="mono">Corner radius</span><span style="font-size: 13px;">4% (17% of cell)</span></div>
+                <div style="display: flex; justify-content: space-between;"><span class="mono">Safe area</span><span style="font-size: 13px;">80 × 80 of 100</span></div>
+              </div>
+            </div>
+            <div class="tile-caption"><span>Specifications</span><span>SVG, 100 × 100 viewBox</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <span class="num">02 / Lockups</span>
+          <div>
+            <h2>Logo + wordmark</h2>
+            <p class="desc">Three approved configurations. The wordmark is set in Geist Semibold (600), lowercase, with -0.03em tracking. The mark height matches the cap height of the wordmark.</p>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="tile">
+            <div class="tile-body">
+              <div class="lockup-row">
+                <svg viewBox="0 0 100 100" width="64" height="64">
+                  <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                </svg>
+                <span class="wordmark" style="font-size: 48px;">corix</span>
+              </div>
+            </div>
+            <div class="tile-caption"><span>Horizontal (primary)</span><span>Mark + wordmark</span></div>
+          </div>
+
+          <div class="tile">
+            <div class="tile-body">
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 16px;">
+                <svg viewBox="0 0 100 100" width="72" height="72">
+                  <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                </svg>
+                <span class="wordmark" style="font-size: 36px;">corix</span>
+              </div>
+            </div>
+            <div class="tile-caption"><span>Stacked</span><span>For square containers</span></div>
+          </div>
+
+          <div class="tile">
+            <div class="tile-body">
+              <svg viewBox="0 0 100 100" width="120" height="120">
+                <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+              </svg>
+            </div>
+            <div class="tile-caption"><span>Mark only</span><span>Avatars, favicons, badges</span></div>
+          </div>
+        </div>
+
+        <div style="margin-top: 32px; padding: 24px; background: rgba(10,10,10,0.04); border-radius: 4px; display: flex; gap: 48px; flex-wrap: wrap;">
+          <div>
+            <div class="mono" style="margin-bottom: 8px;">Wordmark spec</div>
+            <p style="font-size: 14px; line-height: 1.5;">Geist Semibold (600) · lowercase · tracking -0.03em</p>
+          </div>
+          <div>
+            <div class="mono" style="margin-bottom: 8px;">Mark height ratio</div>
+            <p style="font-size: 14px; line-height: 1.5;">Mark = 1.15× cap height of wordmark</p>
+          </div>
+          <div>
+            <div class="mono" style="margin-bottom: 8px;">Mark-to-wordmark gap</div>
+            <p style="font-size: 14px; line-height: 1.5;">Equal to the gap between mark cells</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <span class="num">03 / Clear space</span>
+          <div>
+            <h2>Breathing room</h2>
+            <p class="desc">Always preserve clear space equal to one cell ("x") around the mark in every direction. Nothing else — text, edges, other logos — may enter this zone.</p>
+          </div>
+        </div>
+        <div class="clear-space">
+          <div class="cs-frame">
+            <svg class="bg-grid" viewBox="0 0 400 240" preserveAspectRatio="none">
+              <defs>
+                <pattern id="dots" width="8" height="8" patternUnits="userSpaceOnUse">
+                  <circle cx="1" cy="1" r="0.6" fill="rgba(10,10,10,0.18)"></circle>
+                </pattern>
+              </defs>
+              <rect x="120" y="40" width="160" height="160" fill="url(#dots)"></rect>
+              <rect x="160" y="80" width="80" height="80" fill="none" stroke="rgba(10,10,10,0.35)" stroke-width="1" stroke-dasharray="3 2"></rect>
+              <text x="140" y="125" font-family="Geist Mono" font-size="11" fill="#6b6660" text-anchor="middle">x</text>
+              <text x="260" y="125" font-family="Geist Mono" font-size="11" fill="#6b6660" text-anchor="start">x</text>
+              <text x="200" y="65" font-family="Geist Mono" font-size="11" fill="#6b6660" text-anchor="middle">x</text>
+              <text x="200" y="185" font-family="Geist Mono" font-size="11" fill="#6b6660" text-anchor="middle">x</text>
+            </svg>
+            <div class="mark-wrap">
+              <svg viewBox="0 0 100 100" width="120" height="120">
+                <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+              </svg>
+            </div>
+          </div>
+          <div class="cs-list">
+            <div class="kv">
+              <span class="k">x =</span>
+              <span class="v">The height of one cell in the mark</span>
+            </div>
+            <div class="kv">
+              <span class="k">Apply to</span>
+              <span class="v">All four sides of the mark, and to lockups (measured from the wordmark edge).</span>
+            </div>
+            <div class="kv">
+              <span class="k">Inside boundaries</span>
+              <span class="v">No type, no other logos, no graphic elements, no edges.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <span class="num">04 / Sizing</span>
+          <div>
+            <h2>Minimum sizes</h2>
+            <p class="desc">The mark stays legible down to 16px because the eye reads the C from three high-contrast anchor points. Below 16px, switch to a solid favicon variant.</p>
+          </div>
+        </div>
+        <div class="scale-strip">
+          <div class="scale-cell">
+            <svg viewBox="0 0 100 100" width="96" height="96">
+              <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+              <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+              <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+            </svg>
+            <span class="label">96 px</span>
+          </div>
+          <div class="scale-cell">
+            <svg viewBox="0 0 100 100" width="64" height="64">
+              <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+              <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+              <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+            </svg>
+            <span class="label">64 px</span>
+          </div>
+          <div class="scale-cell">
+            <svg viewBox="0 0 100 100" width="40" height="40">
+              <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+              <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+              <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+            </svg>
+            <span class="label">40 px</span>
+          </div>
+          <div class="scale-cell">
+            <svg viewBox="0 0 100 100" width="24" height="24">
+              <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+              <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+              <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+            </svg>
+            <span class="label">24 px</span>
+          </div>
+          <div class="scale-cell">
+            <svg viewBox="0 0 100 100" width="16" height="16">
+              <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+              <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+              <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+            </svg>
+            <span class="label">16 px (min)</span>
+          </div>
+        </div>
+        <div style="margin-top: 24px; display: flex; gap: 48px; flex-wrap: wrap;">
+          <div>
+            <div class="mono" style="margin-bottom: 6px;">Print minimum</div>
+            <p style="font-size: 14px;">Mark: 8 mm height · Lockup: 14 mm width</p>
+          </div>
+          <div>
+            <div class="mono" style="margin-bottom: 6px;">Digital minimum</div>
+            <p style="font-size: 14px;">Mark: 16 px height · Lockup: 80 px width</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <span class="num">05 / Color</span>
+          <div>
+            <h2>Light and dark</h2>
+            <p class="desc">The mark exists in black or white only. Choose based on background, not preference. Black on light is primary; white on dark is the inverse. There is no greyscale, no gradient, no tint.</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="tile">
+            <div class="tile-body">
+              <div class="lockup-row">
+                <svg viewBox="0 0 100 100" width="80" height="80">
+                  <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                </svg>
+                <span class="wordmark" style="font-size: 56px;">corix</span>
+              </div>
+            </div>
+            <div class="tile-caption">
+              <span>Primary · Ink on Paper</span>
+              <span>#0a0a0a on #f5f4f0</span>
+            </div>
+          </div>
+
+          <div class="tile">
+            <div class="tile-body dark">
+              <div class="lockup-row">
+                <svg viewBox="0 0 100 100" width="80" height="80">
+                  <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#f5f4f0"></rect>
+                  <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#f5f4f0"></rect>
+                  <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#f5f4f0"></rect>
+                </svg>
+                <span class="wordmark light" style="font-size: 56px;">corix</span>
+              </div>
+            </div>
+            <div class="tile-caption">
+              <span>Inverse · Paper on Ink</span>
+              <span>#f5f4f0 on #0a0a0a</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          <div style="display: flex; align-items: center; gap: 20px; padding: 20px; border: 1px solid var(--rule); border-radius: 4px;">
+            <div style="width: 64px; height: 64px; background: #0a0a0a; border-radius: 4px;"></div>
+            <div>
+              <div style="font-size: 16px; font-weight: 600;">Ink</div>
+              <div class="mono" style="margin-top: 4px;">#0a0a0a · rgb(10, 10, 10)</div>
+              <div style="font-size: 13px; color: var(--muted); margin-top: 4px;">Primary mark and type color</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 20px; padding: 20px; border: 1px solid var(--rule); border-radius: 4px;">
+            <div style="width: 64px; height: 64px; background: #f5f4f0; border: 1px solid var(--rule); border-radius: 4px;"></div>
+            <div>
+              <div style="font-size: 16px; font-weight: 600;">Paper</div>
+              <div class="mono" style="margin-top: 4px;">#f5f4f0 · rgb(245, 244, 240)</div>
+              <div style="font-size: 13px; color: var(--muted); margin-top: 4px;">Primary background, inverse mark</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <span class="num">06 / In context</span>
+          <div>
+            <h2>Application</h2>
+            <p class="desc">How the mark behaves across surfaces. The lockup is preferred in long-form contexts (web headers, documents, signatures). The mark stands alone where space is square or scarce (avatars, favicons, app icons).</p>
+          </div>
+        </div>
+
+        <!-- Optical balance explainer -->
+        <div style="margin-bottom: 40px; padding: 32px; border: 1px solid var(--rule); border-radius: 4px; background: rgba(10,10,10,0.02);">
+          <div style="display: grid; grid-template-columns: 200px 1fr; gap: 32px; align-items: start; margin-bottom: 28px;">
+            <span class="mono">Note · Optical balance</span>
+            <div>
+              <h3 style="font-size: 20px; letter-spacing: -0.02em; margin-bottom: 8px;">Center it optically, not mathematically.</h3>
+              <p style="font-size: 14px; line-height: 1.55; color: #2a2724; max-width: 580px;">The mark's mid-row cell anchors the left side, so its visual mass sits left of geometric center. When placed inside a circle or square, nudge the mark <strong>12% rightward</strong> of the container's true center. Don't redraw the mark — the asymmetry is intentional. Only the placement changes.</p>
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <!-- Wrong: mathematical center -->
+            <div class="tile">
+              <div class="tile-body compact" style="position: relative;">
+                <div style="width: 120px; height: 120px; background: var(--paper); border: 1px solid var(--rule); border-radius: 999px; display: flex; align-items: center; justify-content: center; position: relative;">
+                  <!-- Crosshair guides -->
+                  <svg viewBox="0 0 120 120" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;">
+                    <line x1="60" y1="0" x2="60" y2="120" stroke="rgba(220,38,38,0.5)" stroke-width="0.7" stroke-dasharray="2 2"></line>
+                    <line x1="0" y1="60" x2="120" y2="60" stroke="rgba(220,38,38,0.5)" stroke-width="0.7" stroke-dasharray="2 2"></line>
+                  </svg>
+                  <svg viewBox="0 0 100 100" width="70" height="70">
+                    <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                    <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                    <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  </svg>
+                </div>
+              </div>
+              <div class="tile-caption"><span style="color: #b91c1c;">Mathematical center</span><span>Leans left ✗</span></div>
+            </div>
+
+            <!-- Right: optical center -->
+            <div class="tile">
+              <div class="tile-body compact" style="position: relative;">
+                <div style="width: 120px; height: 120px; background: var(--paper); border: 1px solid var(--rule); border-radius: 999px; display: flex; align-items: center; justify-content: center; position: relative;">
+                  <svg viewBox="0 0 120 120" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;">
+                    <line x1="60" y1="0" x2="60" y2="120" stroke="rgba(10,10,10,0.25)" stroke-width="0.7" stroke-dasharray="2 2"></line>
+                    <line x1="0" y1="60" x2="120" y2="60" stroke="rgba(10,10,10,0.25)" stroke-width="0.7" stroke-dasharray="2 2"></line>
+                  </svg>
+                  <svg viewBox="0 0 100 100" width="70" height="70" class="optical-shift">
+                    <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                    <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                    <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  </svg>
+                </div>
+              </div>
+              <div class="tile-caption"><span>Optical center · +12% x</span><span>Feels balanced ✓</span></div>
+            </div>
+
+            <!-- The rule -->
+            <div class="tile">
+              <div class="tile-body compact" style="flex-direction: column; align-items: stretch; padding: 28px; gap: 16px;">
+                <div>
+                  <div class="mono" style="margin-bottom: 6px;">The offset</div>
+                  <div style="font-size: 28px; font-weight: 600; letter-spacing: -0.02em;">+12% of mark width</div>
+                </div>
+                <div>
+                  <div class="mono" style="margin-bottom: 6px;">When to apply</div>
+                  <p style="font-size: 13px; line-height: 1.5; color: #2a2724;">Symmetric containers only — circles, squares, rounded tiles. Skip for free-floating marks and horizontal lockups.</p>
+                </div>
+                <div>
+                  <div class="mono" style="margin-bottom: 6px;">In code</div>
+                  <p style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #2a2724; background: rgba(10,10,10,0.05); padding: 8px 10px; border-radius: 3px;">transform: translateX(12%)</p>
+                </div>
+              </div>
+              <div class="tile-caption"><span>Rule</span><span>Apply in containers</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-4">
+          <div class="tile">
+            <div class="tile-body compact">
+              <div style="width: 96px; height: 96px; background: var(--paper); border: 1px solid var(--rule); border-radius: 999px; display: flex; align-items: center; justify-content: center;">
+                <svg viewBox="0 0 100 100" width="56" height="56" class="optical-shift">
+                  <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                </svg>
+              </div>
+            </div>
+            <div class="tile-caption"><span>Social avatar</span><span>Round, light</span></div>
+          </div>
+
+          <div class="tile">
+            <div class="tile-body compact dark">
+              <div style="width: 96px; height: 96px; background: var(--ink); border-radius: 999px; display: flex; align-items: center; justify-content: center;">
+                <svg viewBox="0 0 100 100" width="56" height="56" class="optical-shift">
+                  <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#f5f4f0"></rect>
+                  <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#f5f4f0"></rect>
+                  <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#f5f4f0"></rect>
+                </svg>
+              </div>
+            </div>
+            <div class="tile-caption"><span>Social avatar</span><span>Round, dark</span></div>
+          </div>
+
+          <div class="tile">
+            <div class="tile-body compact">
+              <div style="width: 96px; height: 96px; background: var(--ink); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+                <svg viewBox="0 0 100 100" width="64" height="64" class="optical-shift">
+                  <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#f5f4f0"></rect>
+                  <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#f5f4f0"></rect>
+                  <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#f5f4f0"></rect>
+                </svg>
+              </div>
+            </div>
+            <div class="tile-caption"><span>App icon</span><span>iOS / Android</span></div>
+          </div>
+
+          <div class="tile">
+            <div class="tile-body compact">
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+                <div style="width: 32px; height: 32px; background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; display: flex; align-items: center; justify-content: center;">
+                  <svg viewBox="0 0 100 100" width="22" height="22" class="optical-shift">
+                    <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                    <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                    <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  </svg>
+                </div>
+                <span class="mono" style="font-size: 9px;">corix.dev</span>
+              </div>
+            </div>
+            <div class="tile-caption"><span>Favicon</span><span>32 px</span></div>
+          </div>
+        </div>
+
+        <div style="margin-top: 24px;" class="grid-2">
+          <div class="tile">
+            <div style="background: var(--paper); padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--rule);">
+              <div class="lockup-row">
+                <svg viewBox="0 0 100 100" width="28" height="28">
+                  <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                </svg>
+                <span class="wordmark" style="font-size: 20px;">corix</span>
+              </div>
+              <div style="display: flex; gap: 24px; font-size: 14px; color: #2a2724;">
+                <span>Product</span><span>Docs</span><span>Pricing</span><span style="font-weight: 600;">Sign in</span>
+              </div>
+            </div>
+            <div style="padding: 56px 32px; background: var(--paper);">
+              <h3 style="font-size: 28px; letter-spacing: -0.02em;">Build with intent.</h3>
+              <p style="font-size: 14px; color: var(--muted); margin-top: 8px;">Sample web header — light surface.</p>
+            </div>
+            <div class="tile-caption"><span>Web header</span><span>Light</span></div>
+          </div>
+
+          <div class="tile">
+            <div style="background: var(--ink); padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(245,244,240,0.1);">
+              <div class="lockup-row">
+                <svg viewBox="0 0 100 100" width="28" height="28">
+                  <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#f5f4f0"></rect>
+                  <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#f5f4f0"></rect>
+                  <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#f5f4f0"></rect>
+                </svg>
+                <span class="wordmark light" style="font-size: 20px;">corix</span>
+              </div>
+              <div style="display: flex; gap: 24px; font-size: 14px; color: rgba(245,244,240,0.75);">
+                <span>Product</span><span>Docs</span><span>Pricing</span><span style="font-weight: 600; color: var(--paper);">Sign in</span>
+              </div>
+            </div>
+            <div style="padding: 56px 32px; background: var(--ink); color: var(--paper);">
+              <h3 style="font-size: 28px; letter-spacing: -0.02em;">Build with intent.</h3>
+              <p style="font-size: 14px; color: rgba(245,244,240,0.55); margin-top: 8px;">Sample web header — dark surface.</p>
+            </div>
+            <div class="tile-caption"><span>Web header</span><span>Dark</span></div>
+          </div>
+        </div>
+
+        <div style="margin-top: 24px;" class="grid-2">
+          <div class="tile">
+            <div class="tile-body" style="padding: 48px; align-items: stretch;">
+              <div style="aspect-ratio: 1.75 / 1; width: 100%; background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; padding: 28px; display: flex; flex-direction: column; justify-content: space-between;">
+                <svg viewBox="0 0 100 100" width="32" height="32">
+                  <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                </svg>
+                <div>
+                  <div style="font-size: 14px; font-weight: 600;">Avery Chen</div>
+                  <div style="font-size: 12px; color: var(--muted);">Founder · avery@corix.dev</div>
+                </div>
+              </div>
+            </div>
+            <div class="tile-caption"><span>Business card</span><span>Light · mark only</span></div>
+          </div>
+
+          <div class="tile">
+            <div class="tile-body dark" style="padding: 48px; align-items: stretch;">
+              <div style="aspect-ratio: 1.75 / 1; width: 100%; background: var(--ink); border: 1px solid rgba(245,244,240,0.15); border-radius: 4px; padding: 28px; display: flex; flex-direction: column; justify-content: space-between; color: var(--paper);">
+                <div class="lockup-row">
+                  <svg viewBox="0 0 100 100" width="24" height="24">
+                    <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#f5f4f0"></rect>
+                    <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#f5f4f0"></rect>
+                    <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#f5f4f0"></rect>
+                  </svg>
+                  <span class="wordmark light" style="font-size: 18px;">corix</span>
+                </div>
+                <div>
+                  <div style="font-size: 14px; font-weight: 600;">Avery Chen</div>
+                  <div style="font-size: 12px; color: rgba(245,244,240,0.6);">Founder · avery@corix.dev</div>
+                </div>
+              </div>
+            </div>
+            <div class="tile-caption"><span>Business card</span><span>Dark · with wordmark</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <span class="num">07 / Do &amp; Don't</span>
+          <div>
+            <h2>Misuse</h2>
+            <p class="desc">A short list. The mark is uncomplicated; its integrity comes from restraint.</p>
+          </div>
+        </div>
+        <div class="grid-3">
+
+          <div class="judgement do">
+            <span class="tag">Do</span>
+            <div class="tile" style="aspect-ratio: 1 / 1;">
+              <div class="tile-body">
+                <svg viewBox="0 0 100 100" width="120" height="120">
+                  <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                </svg>
+              </div>
+            </div>
+            <p class="note">Use Ink on Paper. The default. Always preferred.</p>
+          </div>
+
+          <div class="judgement do">
+            <span class="tag">Do</span>
+            <div class="tile" style="aspect-ratio: 1 / 1;">
+              <div class="tile-body dark">
+                <svg viewBox="0 0 100 100" width="120" height="120">
+                  <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#f5f4f0"></rect>
+                  <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#f5f4f0"></rect>
+                  <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#f5f4f0"></rect>
+                </svg>
+              </div>
+            </div>
+            <p class="note">Inverse on dark surfaces. Mark becomes Paper, never grey.</p>
+          </div>
+
+          <div class="judgement do">
+            <span class="tag">Do</span>
+            <div class="tile" style="aspect-ratio: 1 / 1;">
+              <div class="tile-body" style="background: rgba(10,10,10,0.04);">
+                <svg viewBox="0 0 100 100" width="120" height="120">
+                  <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                </svg>
+              </div>
+            </div>
+            <p class="note">Tinted backgrounds are fine if contrast ≥ 4.5:1 against the mark.</p>
+          </div>
+
+          <div class="judgement dont">
+            <span class="tag">Don't</span>
+            <div class="tile" style="aspect-ratio: 1 / 1;">
+              <div class="tile-body">
+                <svg viewBox="0 0 100 100" width="120" height="120">
+                  <defs>
+                    <linearGradient id="bad-grad" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0" stop-color="#ff5a36"></stop>
+                      <stop offset="1" stop-color="#a020ff"></stop>
+                    </linearGradient>
+                  </defs>
+                  <rect x="38.5" y="10" width="23" height="23" rx="4" fill="url(#bad-grad)"></rect>
+                  <rect x="10" y="38.5" width="23" height="23" rx="4" fill="url(#bad-grad)"></rect>
+                  <rect x="38.5" y="67" width="23" height="23" rx="4" fill="url(#bad-grad)"></rect>
+                </svg>
+              </div>
+            </div>
+            <p class="note">No gradients, no color fills. The mark is monochrome — Ink or Paper only.</p>
+          </div>
+
+          <div class="judgement dont">
+            <span class="tag">Don't</span>
+            <div class="tile" style="aspect-ratio: 1 / 1;">
+              <div class="tile-body">
+                <svg viewBox="0 0 100 100" width="120" height="120">
+                  <g transform="translate(50 50) scale(1.35 0.75) translate(-50 -50)">
+                    <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                    <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                    <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  </g>
+                </svg>
+              </div>
+            </div>
+            <p class="note">Never stretch, skew, or alter the proportions. Scale uniformly.</p>
+          </div>
+
+          <div class="judgement dont">
+            <span class="tag">Don't</span>
+            <div class="tile" style="aspect-ratio: 1 / 1;">
+              <div class="tile-body">
+                <svg viewBox="0 0 100 100" width="120" height="120">
+                  <rect x="38.5" y="10" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  <rect x="10" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  <rect x="38.5" y="67" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                  <rect x="67" y="38.5" width="23" height="23" rx="4" fill="#0a0a0a"></rect>
+                </svg>
+              </div>
+            </div>
+            <p class="note">Don't add, move, or remove cells. The pattern is the identity.</p>
+          </div>
+
+        </div>
+      </section>
+
+      <footer>
+        <span class="mono">Corix Brand · Logo brief v1.0</span>
+        <span class="mono">Questions → brand@corix.dev</span>
+      </footer>
+
+    </div>
+  </body>
+</html>

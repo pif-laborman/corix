@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Corix — Logo proposals</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      html, body { margin: 0; padding: 0; background: #f3f1ec; font-family: 'Geist', system-ui, sans-serif; color: #1a1814; }
+      .meta { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; color: #7a7468; }
+      .label { font-family: 'Geist Mono', monospace; font-size: 12px; letter-spacing: 0.04em; color: #1a1814; }
+      .swatch-row { display: flex; gap: 8px; align-items: center; }
+      .swatch { width: 14px; height: 14px; border-radius: 3px; }
+    </style>
+
+    <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+    <script type="text/babel" src="design-canvas.jsx"></script>
+    <script type="text/babel" src="tweaks-panel.jsx"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+        "palette": ["#0a0a0a","#f5f4f0","#0a0a0a"],
+        "background": "light",
+        "wordmarkFont": "Geist",
+        "wordmarkWeight": 600,
+        "wordmarkCase": "lowercase",
+        "cornerStyle": "soft"
+      }/*EDITMODE-END*/;
+
+      const PALETTES = {
+        "Ink on Paper":  ["#0a0a0a", "#f5f4f0", "#0a0a0a"],
+        "Pure B&W":      ["#000000", "#ffffff", "#000000"],
+        "Warm grey":     ["#1a1814", "#ebe8e0", "#1a1814"],
+        "Cool grey":     ["#0d1117", "#eef0f3", "#0d1117"]
+      };
+
+      function App() {
+        const [t, setTweak] = window.useTweaks(TWEAK_DEFAULTS);
+
+        const primary = t.palette[0];
+        const bgLight = t.palette[1];
+        const ink = t.palette[2];
+        const isDark = t.background === "dark";
+        const bg = isDark ? ink : bgLight;
+        const fg = isDark ? bgLight : ink;
+        const cornerR = t.cornerStyle === "sharp" ? 0.08 : t.cornerStyle === "round" ? 0.32 : 0.18; // as fraction of unit
+
+        // Wordmark renderer
+        const Wordmark = ({ size = 64, color }) => {
+          const text = t.wordmarkCase === "uppercase" ? "CORIX" : t.wordmarkCase === "capital" ? "Corix" : "corix";
+          return (
+            <span style={{
+              fontFamily: `'${t.wordmarkFont}', system-ui, sans-serif`,
+              fontWeight: t.wordmarkWeight,
+              fontSize: size,
+              letterSpacing: t.wordmarkCase === "uppercase" ? "0.04em" : "-0.03em",
+              color: color || fg,
+              lineHeight: 1,
+            }}>{text}</span>
+          );
+        };
+
+        // ====== MARK 1: Bracket-C (three modular bars) ======
+        // A wide top bar, a small left-anchor block, a wide bottom bar.
+        // Reads instantly as a C; uses modular block language without mirroring the inspo.
+        const Mark1 = ({ size = 240, color = primary }) => {
+          const u = size / 100;
+          const r = cornerR * 36 * u / 100 * 100; // arbitrary; tuned below
+          const radius = 14 * (cornerR / 0.18); // matches default
+          return (
+            <svg viewBox="0 0 100 100" width={size} height={size} aria-label="Corix mark — bracket">
+              {/* top bar */}
+              <rect x="10" y="10" width="80" height="22" rx={radius} ry={radius} fill={color} />
+              {/* anchor block (left middle) */}
+              <rect x="10" y="39" width="34" height="22" rx={radius} ry={radius} fill={color} />
+              {/* bottom bar */}
+              <rect x="10" y="68" width="80" height="22" rx={radius} ry={radius} fill={color} />
+            </svg>
+          );
+        };
+
+        // ====== MARK 2 family: Pixel-grid C ======
+        // Configurable grid renderer — pass any 2D 0/1 matrix and it lays out
+        // rounded squares centered in a 100×100 viewBox. Drives the main Mark2
+        // plus every "Pixel C — explorations" variant below.
+        const PixelGrid = ({ pattern, size = 240, color = primary, gapRatio = 0.15, radiusRatio = 0.18 }) => {
+          const rows = pattern.length;
+          const cols = pattern[0].length;
+          // solve cell + gap so cells fill the 80-unit safe area with gapRatio of cell width as gap
+          const inner = 80;
+          const cell = inner / (cols + (cols - 1) * gapRatio);
+          const gap = cell * gapRatio;
+          const totalW = cols * cell + (cols - 1) * gap;
+          const totalH = rows * cell + (rows - 1) * gap;
+          const startX = (100 - totalW) / 2;
+          const startY = (100 - totalH) / 2;
+          const radius = cell * radiusRatio * (cornerR / 0.18);
+          const cells = [];
+          for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+              if (!pattern[row][col]) continue;
+              const x = startX + col * (cell + gap);
+              const y = startY + row * (cell + gap);
+              cells.push(<rect key={`${row}-${col}`} x={x} y={y} width={cell} height={cell} rx={radius} ry={radius} fill={color} />);
+            }
+          }
+          return (
+            <svg viewBox="0 0 100 100" width={size} height={size} aria-label="Corix mark — pixel-C">
+              {cells}
+            </svg>
+          );
+        };
+
+        // Pattern library — each is a distinct take on the pixel-C idea
+        const PATTERNS = {
+          classic: [
+            [1,1,1],
+            [1,0,0],
+            [1,1,1],
+          ],
+          // The user's suggestion — corners removed
+          notched: [
+            [0,1,1],
+            [1,0,0],
+            [0,1,1],
+          ],
+          // Even more minimal — only the three anchor cells of a C
+          minimal: [
+            [0,1,0],
+            [1,0,0],
+            [0,1,0],
+          ],
+          // Two-column tight C
+          tight: [
+            [1,1],
+            [1,0],
+            [1,1],
+          ],
+          // Wider, more horizontal proportion
+          wide: [
+            [1,1,1,1],
+            [1,0,0,0],
+            [1,1,1,1],
+          ],
+          // Tall C — 5 rows, reads more like a bracket
+          tall: [
+            [1,1,1],
+            [1,0,0],
+            [1,0,0],
+            [1,0,0],
+            [1,1,1],
+          ],
+          // Asymmetric — heavier top/bottom, single middle pixel
+          weighted: [
+            [1,1,1,1],
+            [1,0,0,0],
+            [1,0,0,0],
+            [1,1,1,1],
+          ],
+          // Hollow — only outer corners + middle anchor
+          corners: [
+            [1,0,1],
+            [1,0,0],
+            [1,0,1],
+          ],
+        };
+
+        const Mark2 = ({ size = 240, color = primary, pattern = PATTERNS.classic, gapRatio, radiusRatio }) => (
+          <PixelGrid pattern={pattern} size={size} color={color} gapRatio={gapRatio} radiusRatio={radiusRatio} />
+        );
+
+        // ====== MARK 3: Carved C (single mass with notch) ======
+        // A solid rounded square with a rectangular notch carved from its right edge,
+        // forming a chunky, confident C silhouette. Most minimal of the three.
+        const Mark3 = ({ size = 240, color = primary }) => {
+          const radius = 18 * (cornerR / 0.18);
+          const notchR = 10 * (cornerR / 0.18);
+          return (
+            <svg viewBox="0 0 100 100" width={size} height={size} aria-label="Corix mark — carved">
+              <mask id="carve-mask">
+                <rect x="0" y="0" width="100" height="100" fill="black" />
+                <rect x="10" y="10" width="80" height="80" rx={radius} ry={radius} fill="white" />
+                <rect x="42" y="32" width="58" height="36" rx={notchR} ry={notchR} fill="black" />
+              </mask>
+              <rect x="0" y="0" width="100" height="100" fill={color} mask="url(#carve-mask)" />
+            </svg>
+          );
+        };
+
+        // ====== Card chrome ======
+        const Card = ({ title, n, children, note }) => (
+          <div style={{
+            display: "flex", flexDirection: "column", gap: 28,
+            padding: "56px 56px 44px", height: "100%", boxSizing: "border-box",
+            background: bg, color: fg,
+          }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+              <span className="meta" style={{ color: isDark ? "rgba(243,241,236,0.5)" : "#7a7468" }}>Proposal 0{n}</span>
+              <span className="meta" style={{ color: isDark ? "rgba(243,241,236,0.5)" : "#7a7468" }}>{title}</span>
+            </div>
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: 36 }}>
+              {children}
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 16 }}>
+              <p style={{ margin: 0, fontSize: 13, lineHeight: 1.5, maxWidth: 360, color: isDark ? "rgba(243,241,236,0.7)" : "#56524a" }}>{note}</p>
+              <div className="swatch-row">
+                <span className="swatch" style={{ background: primary }} />
+                <span className="swatch" style={{ background: fg, outline: `1px solid ${isDark ? "rgba(243,241,236,0.2)" : "rgba(26,24,20,0.1)"}` }} />
+              </div>
+            </div>
+          </div>
+        );
+
+        const Lockup = ({ MarkComp, gap = 28, markSize = 96, wordSize = 76 }) => (
+          <div style={{ display: "flex", alignItems: "center", gap }}>
+            <MarkComp size={markSize} />
+            <Wordmark size={wordSize} />
+          </div>
+        );
+
+        const ScaleStrip = ({ MarkComp }) => (
+          <div style={{ display: "flex", alignItems: "center", gap: 32, padding: "16px 24px", border: `1px dashed ${isDark ? "rgba(243,241,236,0.15)" : "rgba(26,24,20,0.12)"}`, borderRadius: 8 }}>
+            {[64, 40, 24, 16].map(s => (
+              <div key={s} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                <MarkComp size={s} />
+                <span className="meta" style={{ fontSize: 9, color: isDark ? "rgba(243,241,236,0.4)" : "#9a9488" }}>{s}px</span>
+              </div>
+            ))}
+          </div>
+        );
+
+        return (
+          <>
+            <DesignCanvas title="Corix — Logo proposals" initialZoom={0.55}>
+              <DCSection id="marks" title="Three directions">
+
+                <DCArtboard id="p1" label="01 — Bracket C" width={900} height={1100}>
+                  <Card n={1} title="Bracket C"
+                    note="Three modular bars stack into a confident C. Reads cleanly at any size; the modular grammar nods to systems thinking — blocks that snap into place.">
+                    <Lockup MarkComp={Mark1} />
+                    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                      <Mark1 size={360} />
+                    </div>
+                    <ScaleStrip MarkComp={Mark1} />
+                  </Card>
+                </DCArtboard>
+
+                <DCArtboard id="p2" label="02 — Pixel C" width={900} height={1100}>
+                  <Card n={2} title="Pixel C"
+                    note="A 3×3 grid with the classic pixel-C pattern. Technical, granular, code-flavored — every square is its own atomic unit. Animates beautifully (cells can pulse, swap, build).">
+                    <Lockup MarkComp={Mark2} />
+                    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                      <Mark2 size={360} />
+                    </div>
+                    <ScaleStrip MarkComp={Mark2} />
+                  </Card>
+                </DCArtboard>
+
+                <DCArtboard id="p3" label="03 — Carved C" width={900} height={1100}>
+                  <Card n={3} title="Carved C"
+                    note="A single solid mass with a notch carved out. The most minimal — one shape doing all the work. Strong silhouette, scales down to favicon-tier without losing identity.">
+                    <Lockup MarkComp={Mark3} />
+                    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                      <Mark3 size={360} />
+                    </div>
+                    <ScaleStrip MarkComp={Mark3} />
+                  </Card>
+                </DCArtboard>
+
+              </DCSection>
+
+              <DCSection id="pixel-explore" title="Pixel C — explorations">
+
+                <DCArtboard id="px-notched" label="A — Notched (your suggestion)" width={620} height={760}>
+                  <Card n={"2A"} title="Notched"
+                    note="Corners removed. Five cells in a syncopated rhythm — the eye fills the missing corners, so the C still reads. More distinctive than the classic 7-cell.">
+                    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                      <Mark2 size={300} pattern={PATTERNS.notched} />
+                    </div>
+                    <Lockup MarkComp={(p) => <Mark2 {...p} pattern={PATTERNS.notched} />} markSize={64} wordSize={52} gap={20} />
+                    <ScaleStrip MarkComp={(p) => <Mark2 {...p} pattern={PATTERNS.notched} />} />
+                  </Card>
+                </DCArtboard>
+
+                <DCArtboard id="px-classic" label="B — Classic 7-cell" width={620} height={760}>
+                  <Card n={"2B"} title="Classic"
+                    note="Reference: the original 3×3 with full top/bottom rows and a single mid-left anchor. The most literal pixel C — solid, immediately readable.">
+                    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                      <Mark2 size={300} pattern={PATTERNS.classic} />
+                    </div>
+                    <Lockup MarkComp={(p) => <Mark2 {...p} pattern={PATTERNS.classic} />} markSize={64} wordSize={52} gap={20} />
+                    <ScaleStrip MarkComp={(p) => <Mark2 {...p} pattern={PATTERNS.classic} />} />
+                  </Card>
+                </DCArtboard>
+
+                <DCArtboard id="px-minimal" label="C — Minimal (3 cells)" width={620} height={760}>
+                  <Card n={"2C"} title="Minimal"
+                    note="Stripped to three cells: top-center, mid-left, bottom-center. The C is implied rather than drawn. Reads as a sparse constellation — very modern.">
+                    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                      <Mark2 size={300} pattern={PATTERNS.minimal} />
+                    </div>
+                    <Lockup MarkComp={(p) => <Mark2 {...p} pattern={PATTERNS.minimal} />} markSize={64} wordSize={52} gap={20} />
+                    <ScaleStrip MarkComp={(p) => <Mark2 {...p} pattern={PATTERNS.minimal} />} />
+                  </Card>
+                </DCArtboard>
+
+                <DCArtboard id="px-tight" label="D — Tight 2×3" width={620} height={760}>
+                  <Card n={"2D"} title="Tight"
+                    note="2-column version. Heavier, more compact silhouette — sits closer to a glyph than a pattern. Strong at small sizes.">
+                    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                      <Mark2 size={300} pattern={PATTERNS.tight} />
+                    </div>
+                    <Lockup MarkComp={(p) => <Mark2 {...p} pattern={PATTERNS.tight} />} markSize={64} wordSize={52} gap={20} />
+                    <ScaleStrip MarkComp={(p) => <Mark2 {...p} pattern={PATTERNS.tight} />} />
+                  </Card>
+                </DCArtboard>
+
+                <DCArtboard id="px-wide" label="E — Wide 4×3" width={620} height={760}>
+                  <Card n={"2E"} title="Wide"
+                    note="Stretched to 4 columns. More horizontal proportion, more obvious bracket. Good for app icons and badges where width is plentiful.">
+                    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                      <Mark2 size={300} pattern={PATTERNS.wide} />
+                    </div>
+                    <Lockup MarkComp={(p) => <Mark2 {...p} pattern={PATTERNS.wide} />} markSize={64} wordSize={52} gap={20} />
+                    <ScaleStrip MarkComp={(p) => <Mark2 {...p} pattern={PATTERNS.wide} />} />
+                  </Card>
+                </DCArtboard>
+
+                <DCArtboard id="px-tall" label="F — Tall 3×5" width={620} height={760}>
+                  <Card n={"2F"} title="Tall"
+                    note="Stretched vertically — five rows with a single anchor column. Reads more like a bracket [ than a C. Distinctive in a grid of square icons.">
+                    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                      <Mark2 size={300} pattern={PATTERNS.tall} />
+                    </div>
+                    <Lockup MarkComp={(p) => <Mark2 {...p} pattern={PATTERNS.tall} />} markSize={64} wordSize={52} gap={20} />
+                    <ScaleStrip MarkComp={(p) => <Mark2 {...p} pattern={PATTERNS.tall} />} />
+                  </Card>
+                </DCArtboard>
+
+                <DCArtboard id="px-weighted" label="G — Weighted 4×4" width={620} height={760}>
+                  <Card n={"2G"} title="Weighted"
+                    note="Heavier top and bottom bars with a slim left edge. Feels like a structural element — beam-and-column. The most architectural variant.">
+                    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                      <Mark2 size={300} pattern={PATTERNS.weighted} />
+                    </div>
+                    <Lockup MarkComp={(p) => <Mark2 {...p} pattern={PATTERNS.weighted} />} markSize={64} wordSize={52} gap={20} />
+                    <ScaleStrip MarkComp={(p) => <Mark2 {...p} pattern={PATTERNS.weighted} />} />
+                  </Card>
+                </DCArtboard>
+
+                <DCArtboard id="px-corners" label="H — Corners only" width={620} height={760}>
+                  <Card n={"2H"} title="Corners"
+                    note="Five cells: four outer corners + center-left anchor. The opposite of the Notched variant — strips out the middle of each bar. Reads as a constellation with strong corner weight.">
+                    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                      <Mark2 size={300} pattern={PATTERNS.corners} />
+                    </div>
+                    <Lockup MarkComp={(p) => <Mark2 {...p} pattern={PATTERNS.corners} />} markSize={64} wordSize={52} gap={20} />
+                    <ScaleStrip MarkComp={(p) => <Mark2 {...p} pattern={PATTERNS.corners} />} />
+                  </Card>
+                </DCArtboard>
+
+              </DCSection>
+
+              <DCSection id="contexts" title="In context">
+
+                <DCArtboard id="c1" label="App icon — Bracket (dark)" width={520} height={520}>
+                  <div style={{ width: "100%", height: "100%", background: ink, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <Mark1 size={340} color={bgLight} />
+                  </div>
+                </DCArtboard>
+
+                <DCArtboard id="c2" label="App icon — Pixel (light)" width={520} height={520}>
+                  <div style={{ width: "100%", height: "100%", background: bgLight, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <Mark2 size={340} color={ink} />
+                  </div>
+                </DCArtboard>
+
+                <DCArtboard id="c3" label="App icon — Carved (dark)" width={520} height={520}>
+                  <div style={{ width: "100%", height: "100%", background: ink, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <Mark3 size={340} color={bgLight} />
+                  </div>
+                </DCArtboard>
+
+                <DCArtboard id="c4" label="On dark — wordmark lockups" width={1640} height={520}>
+                  <div style={{ width: "100%", height: "100%", background: ink, display: "flex", alignItems: "center", justifyContent: "space-around", padding: "0 40px", boxSizing: "border-box" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+                      <Mark1 size={88} color={bgLight} />
+                      <span style={{ fontFamily: `'${t.wordmarkFont}', sans-serif`, fontWeight: t.wordmarkWeight, fontSize: 72, color: bgLight, letterSpacing: "-0.03em" }}>
+                        {t.wordmarkCase === "uppercase" ? "CORIX" : t.wordmarkCase === "capital" ? "Corix" : "corix"}
+                      </span>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+                      <Mark2 size={88} color={bgLight} />
+                      <span style={{ fontFamily: `'${t.wordmarkFont}', sans-serif`, fontWeight: t.wordmarkWeight, fontSize: 72, color: bgLight, letterSpacing: "-0.03em" }}>
+                        {t.wordmarkCase === "uppercase" ? "CORIX" : t.wordmarkCase === "capital" ? "Corix" : "corix"}
+                      </span>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+                      <Mark3 size={88} color={bgLight} />
+                      <span style={{ fontFamily: `'${t.wordmarkFont}', sans-serif`, fontWeight: t.wordmarkWeight, fontSize: 72, color: bgLight, letterSpacing: "-0.03em" }}>
+                        {t.wordmarkCase === "uppercase" ? "CORIX" : t.wordmarkCase === "capital" ? "Corix" : "corix"}
+                      </span>
+                    </div>
+                  </div>
+                </DCArtboard>
+
+              </DCSection>
+            </DesignCanvas>
+
+            <TweaksPanel title="Tweaks">
+                <TweakSection title="Color">
+                  <TweakColor label="Primary palette"
+                    options={Object.values(PALETTES)}
+                    value={t.palette}
+                    onChange={(v) => setTweak('palette', v)} />
+                  <TweakRadio label="Background"
+                    options={[{label:"Light", value:"light"},{label:"Dark", value:"dark"}]}
+                    value={t.background}
+                    onChange={(v) => setTweak('background', v)} />
+                </TweakSection>
+
+                <TweakSection title="Wordmark">
+                  <TweakSelect label="Font"
+                    options={["Geist","Space Grotesk","Geist Mono"]}
+                    value={t.wordmarkFont}
+                    onChange={(v) => setTweak('wordmarkFont', v)} />
+                  <TweakSelect label="Weight"
+                    options={[{label:"Regular 400", value:400},{label:"Medium 500", value:500},{label:"Semibold 600", value:600},{label:"Bold 700", value:700}]}
+                    value={t.wordmarkWeight}
+                    onChange={(v) => setTweak('wordmarkWeight', Number(v))} />
+                  <TweakRadio label="Case"
+                    options={[{label:"corix", value:"lowercase"},{label:"Corix", value:"capital"},{label:"CORIX", value:"uppercase"}]}
+                    value={t.wordmarkCase}
+                    onChange={(v) => setTweak('wordmarkCase', v)} />
+                </TweakSection>
+
+                <TweakSection title="Geometry">
+                  <TweakRadio label="Corners"
+                    options={[{label:"Sharp", value:"sharp"},{label:"Soft", value:"soft"},{label:"Round", value:"round"}]}
+                    value={t.cornerStyle}
+                    onChange={(v) => setTweak('cornerStyle', v)} />
+                </TweakSection>
+              </TweaksPanel>
+          </>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+  </body>
+</html>
