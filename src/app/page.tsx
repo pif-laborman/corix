@@ -5,13 +5,11 @@ function Nav() {
     <nav className="fixed top-0 left-0 right-0 z-50 border-b" style={{ borderColor: 'var(--border)', background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(16px)' }}>
       <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2" style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}>
-          <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: 'var(--fill-action)' }}>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
-              <path d="M12 2L2 7l10 5 10-5-10-5z" />
-              <path d="M2 17l10 5 10-5" />
-              <path d="M2 12l10 5 10-5" />
-            </svg>
-          </div>
+          <svg width="22" height="22" viewBox="0 0 100 100" aria-label="Corix">
+            <rect x="38.5" y="10" width="23" height="23" rx="4" fill="currentColor" />
+            <rect x="10" y="38.5" width="23" height="23" rx="4" fill="currentColor" />
+            <rect x="38.5" y="67" width="23" height="23" rx="4" fill="currentColor" />
+          </svg>
           <span style={{ fontSize: 'var(--text-sm)' }}>Corix</span>
         </Link>
         <div className="hidden sm:flex items-center gap-6">

@@ -54,11 +54,11 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         <div className="text-center" style={{ marginBottom: 'var(--space-8)' }}>
           <Link href="/" className="inline-flex items-center gap-2" style={{ marginBottom: 'var(--space-6)', fontFamily: 'var(--font-display)', fontWeight: 500 }}>
-            <div className="w-7 h-7 rounded-md flex items-center justify-center" style={{ background: 'var(--fill-action)' }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
-                <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
-              </svg>
-            </div>
+            <svg width="24" height="24" viewBox="0 0 100 100" aria-label="Corix">
+              <rect x="38.5" y="10" width="23" height="23" rx="4" fill="currentColor" />
+              <rect x="10" y="38.5" width="23" height="23" rx="4" fill="currentColor" />
+              <rect x="38.5" y="67" width="23" height="23" rx="4" fill="currentColor" />
+            </svg>
             <span style={{ fontSize: 'var(--text-lg)' }}>Corix</span>
           </Link>
           <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'var(--text-xl)', marginBottom: 'var(--space-1)' }}>Welcome back</h1>
