@@ -172,7 +172,7 @@ function WorkspacePanel({ workspaceName, workspaceId, workspaceIconUrl, apiKeys,
         <ApiKeysPanel initialKeys={apiKeys} />
       </div>
 
-      <a href="/docs" style={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)", fontFamily: "var(--font-body)" }} className="inline-flex items-center gap-1 hover:opacity-70 transition-opacity">
+      <a href="https://docs.corix.dev" style={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)", fontFamily: "var(--font-body)" }} className="inline-flex items-center gap-1 hover:opacity-70 transition-opacity">
         API docs <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
       </a>
 

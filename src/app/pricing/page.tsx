@@ -67,7 +67,7 @@ export default function PricingPage() {
             <span style={{ fontFamily: 'var(--font-geist)', fontWeight: 600, fontSize: 'var(--text-sm)', letterSpacing: '-0.03em' }}>corix</span>
           </Link>
           <div className="hidden sm:flex items-center gap-6">
-            <Link href="/docs" className="hover:opacity-70 transition-opacity" style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>Docs</Link>
+            <Link href="https://docs.corix.dev" className="hover:opacity-70 transition-opacity" style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>Docs</Link>
             <Link href="/pricing" style={{ fontSize: 'var(--text-sm)', fontWeight: 500, fontFamily: 'var(--font-display)' }}>Pricing</Link>
             <Link href="/login" className="btn-primary" style={{ padding: '6px 16px', fontSize: 'var(--text-sm)' }}>Start building</Link>
           </div>

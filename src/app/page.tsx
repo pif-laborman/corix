@@ -13,7 +13,7 @@ function Nav() {
           <span style={{ fontFamily: 'var(--font-geist)', fontWeight: 600, fontSize: 'var(--text-sm)', letterSpacing: '-0.03em' }}>corix</span>
         </Link>
         <div className="hidden sm:flex items-center gap-6">
-          <Link href="/docs" className="transition-colors hover:opacity-70" style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', fontFamily: 'var(--font-body)' }}>Docs</Link>
+          <Link href="https://docs.corix.dev" className="transition-colors hover:opacity-70" style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', fontFamily: 'var(--font-body)' }}>Docs</Link>
           <Link href="/pricing" className="transition-colors hover:opacity-70" style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', fontFamily: 'var(--font-body)' }}>Pricing</Link>
           <Link href="https://github.com/pif-laborman/corix" className="transition-colors hover:opacity-70" style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', fontFamily: 'var(--font-body)' }}>GitHub</Link>
           <Link href="/login" className="btn-primary" style={{ padding: '6px 16px', fontSize: 'var(--text-sm)' }}>
@@ -169,7 +169,7 @@ function CTA() {
       </p>
       <div className="flex items-center justify-center gap-3">
         <Link href="/login" className="btn-primary">Start building</Link>
-        <Link href="/docs" className="btn-outline">Read the docs</Link>
+        <Link href="https://docs.corix.dev" className="btn-outline">Read the docs</Link>
       </div>
     </section>
   );
@@ -181,7 +181,7 @@ function Footer() {
       <div className="max-w-5xl mx-auto px-6 flex items-center justify-between" style={{ paddingTop: 'var(--space-8)', paddingBottom: 'var(--space-8)' }}>
         <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>Corix</span>
         <div className="flex items-center gap-5">
-          <Link href="/docs" className="hover:opacity-70 transition-opacity" style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>Docs</Link>
+          <Link href="https://docs.corix.dev" className="hover:opacity-70 transition-opacity" style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>Docs</Link>
           <Link href="/pricing" className="hover:opacity-70 transition-opacity" style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>Pricing</Link>
           <Link href="/privacy" className="hover:opacity-70 transition-opacity" style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>Privacy</Link>
           <Link href="/terms" className="hover:opacity-70 transition-opacity" style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>Terms</Link>
@@ -212,7 +212,7 @@ export default function Home() {
           </p>
           <div className="flex items-center justify-center gap-3" style={{ marginBottom: 'var(--space-16)' }}>
             <Link href="/login" className="btn-primary">Start building</Link>
-            <Link href="/docs" className="btn-outline">Read the docs</Link>
+            <Link href="https://docs.corix.dev" className="btn-outline">Read the docs</Link>
           </div>
           <HeroCode />
         </section>
